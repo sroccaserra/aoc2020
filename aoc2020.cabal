@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 14af6d3de14779f29db3ef4f358bb659f4a722e90e0d7facaf5c3f3479cfd980
+-- hash: 72f99a44a500a9f01a9c320baced1ca220ad70d6343a93b772695764c9969e68
 
 name:           aoc2020
 version:        0.1.0.0
@@ -27,6 +27,8 @@ source-repository head
 
 library
   exposed-modules:
+      Day01
+      Day01Spec
       Lib
   other-modules:
       Paths_aoc2020
@@ -34,6 +36,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , hspec >=2.7.4 && <3
   default-language: Haskell2010
 
 executable aoc2020-exe
@@ -59,4 +62,5 @@ test-suite aoc2020-test
   build-depends:
       aoc2020
     , base >=4.7 && <5
+    , hspec >=2.7.4 && <3
   default-language: Haskell2010
