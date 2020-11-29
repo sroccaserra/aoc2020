@@ -1,8 +1,9 @@
 module Day01 where
 
+main :: IO ()
 main = do
-    lines <- fmap lines getContents
-    print $ process lines
+  inputLines <- fmap lines getContents
+  print $ process inputLines
 
 process :: [String] -> [[Int]]
 process = map processLine

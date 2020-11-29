@@ -1,8 +1,12 @@
 module Day01Spec where
 
+import Day01 (processLine)
+
 import Test.Hspec
 
+main :: IO ()
 main = hspec $ do
-  describe "A failing test" $ do
-    it "fails" $ do
-      5 `shouldBe` 6
+  describe "Processing a line" $ do
+    it "reads a list of numbers" $ do
+      let result = processLine "1 2 3"
+      result `shouldBe` [1, 2, 3]
