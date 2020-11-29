@@ -1,6 +1,6 @@
 module DayXXSpec where
 
-import DayXX (processLine)
+import DayXX hiding (main)
 
 import Test.Hspec
 
