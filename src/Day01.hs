@@ -12,10 +12,9 @@ parse = map read
 
 partTwo :: [Int] -> Int
 partTwo ns =
-  let ts = do
-        x <- ns
-        y <- ns
-        z <- ns
-        return (x+y+z, x*y*z)
-      in
-  snd . head $ filter ((== 2020).fst) ts
+  snd . head $ filter ((== 2020) . fst) ts
+    where ts = do
+            x <- ns
+            y <- ns
+            z <- ns
+            return (x+y+z, x*y*z)
