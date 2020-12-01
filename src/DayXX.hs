@@ -1,12 +1,14 @@
 module DayXX where
 
+import Data.Function
+
 main :: IO ()
 main = do
   inputLines <- fmap lines getContents
-  print $ process inputLines
+  print $ inputLines & parse & partOne
 
-process :: [String] -> [[Int]]
-process = map processLine
+parse :: [String] -> [Int]
+parse = map read
 
-processLine :: String -> [Int]
-processLine = map read . words
+partOne :: [Int] -> Int
+partOne = head

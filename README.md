@@ -19,12 +19,12 @@ $ git commit
 ## Running
 
 ```
-$ echo 1 2 3 | stack runhaskell -- src/Day01
-[[1,2,3]]
+$ echo -e "1\n2\n3" | stack runhaskell -- src/DayXX
+1
 ```
 
 ## Tests
 
 ```
-$ stack runhaskell -- src/Day01Spec
+$ stack runhaskell -- src/DayXXSpec
 ```
