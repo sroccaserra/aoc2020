@@ -34,3 +34,9 @@ $ stack test --file-watch
 ```
 $ stack ghci src/DayXX.hs
 ```
+
+## References
+
+- <https://two-wrongs.com/parser-combinators-parsing-for-haskell-beginners>
+- <https://github.com/Morendil/AdventOfCode2019>
+- <https://ravichugh.gitbooks.io/a-quarter-of-haskell/content/parsing/more.html>

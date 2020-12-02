@@ -2,6 +2,8 @@ module Day02 where
 
 import Data.Char
 import Data.Function
+import Data.Maybe
+import Text.ParserCombinators.ReadP
 
 main :: IO ()
 main = do
@@ -34,3 +36,29 @@ parseLine x = PasswordInfo (read x1 ::Int) (read x2 ::Int) (head x3) x4
         clean c
           | isDigit c || isAlpha c = c
           | otherwise = ' '
+
+---
+-- Working but unused, written to learn parser combinators.
+
+parseLineReadP :: String -> PasswordInfo
+parseLineReadP x = fromMaybe (PasswordInfo 0 0 ' ' "") p
+  where p = case reverse allMatches of
+                 [] -> Nothing
+                 ((bestMatch, _):_) -> Just bestMatch
+        allMatches = readP_to_S parser x
+        parser = do
+          n1 <- int
+          skipMany1 $ char '-'
+          n2 <- int
+          skipSpaces
+          c <- get
+          _ <- string ": "
+          s <- letters
+          eof
+          return $ PasswordInfo n1 n2 c s
+
+int :: ReadP Int
+int = fmap read $ many1 $ satisfy isDigit
+
+letters :: ReadP String
+letters = many1 $ satisfy isAlpha

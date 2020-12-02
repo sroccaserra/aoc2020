@@ -5,6 +5,10 @@ import Day02 hiding (main)
 import Test.Hspec
 
 spec = describe "Parsing a line" $ do
-  it "reads a list of numbers" $ do
+  it "reads password info" $ do
     let result = parseLine "1-20 a: aaa"
+    result `shouldBe` PasswordInfo 1 20 'a' "aaa"
+
+  it "reads passowrd info with parser combinators" $ do
+    let result = parseLineReadP "1-20 a: aaa"
     result `shouldBe` PasswordInfo 1 20 'a' "aaa"
