@@ -26,5 +26,11 @@ $ echo -e "1: 2,3\n2: 3,4\n3: 5,6" | stack runhaskell -- src/DayXX
 ## Tests
 
 ```
-$ stack runhaskell -- src/DayXXSpec
+$ stack test --file-watch
+```
+
+## Repl
+
+```
+$ stack ghci src/DayXX.hs
 ```
