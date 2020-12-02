@@ -34,7 +34,7 @@ parseLine :: String -> PasswordInfo
 parseLine x = PasswordInfo (read x1 ::Int) (read x2 ::Int) (head x3) x4
   where [x1, x2, x3, x4] = x & map clean & words
         clean c
-          | isDigit c || isAlpha c = c
+          | isAlphaNum c = c
           | otherwise = ' '
 
 ---
