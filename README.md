@@ -19,8 +19,8 @@ $ git commit
 ## Running
 
 ```
-$ echo -e "1\n2\n3" | stack runhaskell -- src/DayXX
-1
+$ echo -e "1: 2,3\n2: 3,4\n3: 5,6" | stack runhaskell -- src/DayXX
+[1,2,3]
 ```
 
 ## Tests
