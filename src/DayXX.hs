@@ -1,12 +1,9 @@
 module DayXX where
 
 import Data.Char
-import Data.Function
 
 main :: IO ()
-main = do
-  inputLines <- fmap lines getContents
-  print $ inputLines & map parseLine & partOne
+main = interact $ show . partOne . (map parseLine) . lines
 
 parseLine :: String -> [Int]
 parseLine = map read . words . map clean
