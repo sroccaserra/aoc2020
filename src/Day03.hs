@@ -8,8 +8,11 @@ main = do
   print $ inputLines & partOne
 
 partOne :: Map -> Int
-partOne m = sum $ take 323 $ map (fromEnum . isTreeAt m) positions
-  where positions = iterate (nextPosition (3, 1)) (0,0)
+partOne m = countTrees m (3,1)
+
+countTrees :: Map -> Slope -> Int
+countTrees m s = sum $ take 323 $ map (fromEnum . isTreeAt m) positions
+  where positions = iterate (nextPosition s) (0,0)
 
 isTreeAt :: Map -> Position -> Bool
 isTreeAt m = isTree . at m
