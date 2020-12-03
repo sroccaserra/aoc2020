@@ -5,14 +5,18 @@ import Data.Function
 main :: IO ()
 main = do
   inputLines <- fmap lines getContents
-  print $ inputLines & partOne
+  print $ inputLines & partTwo
 
 partOne :: Map -> Int
 partOne m = countTrees m (3,1)
 
+partTwo :: Map -> Int
+partTwo m = foldl (*) 1 $ map (countTrees m) [(1,1), (3,1), (5,1), (7,1), (1,2)]
+
 countTrees :: Map -> Slope -> Int
-countTrees m s = sum $ take 323 $ map (fromEnum . isTreeAt m) positions
+countTrees m s@(_,dy) = sum $ take n $ map (fromEnum . isTreeAt m) positions
   where positions = iterate (nextPosition s) (0,0)
+        n = div 323 dy
 
 isTreeAt :: Map -> Position -> Bool
 isTreeAt m = isTree . at m
