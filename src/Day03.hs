@@ -1,11 +1,9 @@
 module Day03 where
 
-import Data.Function
-
 main :: IO ()
 main = do
   inputLines <- fmap lines getContents
-  print $ inputLines & partTwo
+  print $ partTwo inputLines
 
 partOne :: Map -> Int
 partOne m = countTrees m (3,1)
@@ -30,4 +28,4 @@ isTreeAt m = isTree . at m
 at :: Map -> Position -> Char
 at m (x, y) = m !! y !! x'
   where x' = mod x w
-        w = m & head & length
+        w = length $ head m
