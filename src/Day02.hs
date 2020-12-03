@@ -31,11 +31,10 @@ data PasswordInfo = PasswordInfo Int Int Char String
                   deriving (Show, Eq)
 
 parseLine :: String -> PasswordInfo
-parseLine x = PasswordInfo (read x1 ::Int) (read x2 ::Int) (head x3) x4
-  where [x1, x2, x3, x4] = x & map clean & words
-        clean c
-          | isAlphaNum c = c
-          | otherwise = ' '
+parseLine s = PasswordInfo (read w) (read x) (head y) z
+  where [w, x, y, z] = s & map clean & words
+        clean c | isAlphaNum c = c
+                | otherwise = ' '
 
 ---
 -- Working but unused, written to learn parser combinators.
