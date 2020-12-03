@@ -9,7 +9,7 @@ main = do
 
 partOne :: Map -> Int
 partOne m = sum $ take 323 $ map (fromEnum . isTreeAt m) positions
-  where positions = iterate nextPosition (0,0)
+  where positions = iterate (nextPosition (3, 1)) (0,0)
 
 isTreeAt :: Map -> Position -> Bool
 isTreeAt m = isTree . at m
@@ -24,8 +24,9 @@ at m (x, y) = m !! y !! x'
 width :: Map -> Int
 width = length . (!! 0)
 
-nextPosition :: Position -> Position
-nextPosition (x, y) = (x+3, y+1)
+nextPosition :: Slope -> Position -> Position
+nextPosition (dx, dy) (x, y) = (x+dx, y+dy)
 
 type Map = [String]
 type Position = (Int, Int)
+type Slope = (Int, Int)
