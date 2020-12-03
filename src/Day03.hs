@@ -16,14 +16,10 @@ type Position = (Int, Int)
 type Slope = (Int, Int)
 
 countTrees :: Map -> Slope -> Int
-countTrees m (dx,dy) = sum $ take n $ map (fromEnum . isTreeAt m) positions
+countTrees m (dx,dy) = length $ filter (== '#') $ take n $ map (at m) positions
   where n = div 323 dy
         positions = iterate nextPosition (0,0)
         nextPosition (x, y) = (x+dx, y+dy)
-
-isTreeAt :: Map -> Position -> Bool
-isTreeAt m = isTree . at m
-  where isTree = (== '#')
 
 at :: Map -> Position -> Char
 at m (x, y) = m !! y !! x'
