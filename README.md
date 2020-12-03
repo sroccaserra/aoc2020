@@ -37,6 +37,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- The [cycle][cy] function turns a finite list to a cycling infinite one
 - The [mapMaybe][mm] function (`(a -> Maybe b) -> [a] -> [b]`)
 - The [fromEnum][fe] function, used to convert `Bool` to `Int` in day 03
 - The [fromMaybe][fm] function (`a -> Maybe a -> a`)
@@ -45,6 +46,7 @@ $ stack ghci src/DayXX.hs
 - The [&][&] operator, works like a pipe operator
 - The `do` notation can be used as a [list comprehension][lc]
 
+[cy]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:cycle
 [mm]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Maybe.html#v:mapMaybe
 [fe]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:fromEnum
 [fm]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Maybe.html#v:fromMaybe

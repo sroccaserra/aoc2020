@@ -22,6 +22,4 @@ countTrees m (dx,dy) = length $ filter (== '#') $ take n $ map (at m) positions
         nextPosition (x, y) = (x+dx, y+dy)
 
 at :: Map -> Position -> Char
-at m (x, y) = m !! y !! x'
-  where x' = mod x w
-        w = length $ head m
+at m (x, y) = (cycle $ m !! y)  !! x
