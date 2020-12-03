@@ -1,9 +1,7 @@
 module Day03 where
 
 main :: IO ()
-main = do
-  inputLines <- fmap lines getContents
-  print $ partTwo inputLines
+main = interact $ show . partTwo . lines
 
 partOne :: Map -> Int
 partOne m = countTrees m (3,1)
