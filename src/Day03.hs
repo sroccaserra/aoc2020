@@ -20,16 +20,12 @@ countTrees m s@(_,dy) = sum $ take n $ map (fromEnum . isTreeAt m) positions
 
 isTreeAt :: Map -> Position -> Bool
 isTreeAt m = isTree . at m
-
-isTree :: Char -> Bool
-isTree = (== '#')
+  where isTree = (== '#')
 
 at :: Map -> Position -> Char
 at m (x, y) = m !! y !! x'
-  where x' = mod x $ width m
-
-width :: Map -> Int
-width = length . (!! 0)
+  where x' = mod x w
+        w = m & head & length
 
 nextPosition :: Slope -> Position -> Position
 nextPosition (dx, dy) (x, y) = (x+dx, y+dy)
