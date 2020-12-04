@@ -23,19 +23,16 @@ isValid (Passport byr ecl eyr hcl hgt iyr pid)= isByrValid byr && isEclValid ecl
   isEyrValid eyr && isHclValid hcl && isHgtValid hgt && isIyrValid iyr && isPidValid pid
 
 isByrValid byr = 1920 <= n && n <= 2002
-  where n = read $ last $ words s
-        s = map clean byr
+  where n = read $ valueFrom byr
 
 isEclValid ecl =
   elem ecl ["ecl:amb", "ecl:blu", "ecl:brn", "ecl:gry", "ecl:grn", "ecl:hzl", "ecl:oth"]
 
 isEyrValid eyr = 2020 <= n && n <= 2030
-  where n = read $ last $ words s
-        s = map clean eyr
+  where n = read $ valueFrom eyr
 
-isHclValid hcl = (hcl !! 4 == '#') && length v == 6 && all isHcl v
-  where v = last $ words s
-        s = map clean hcl
+isHclValid hcl = (hcl !! 4 == '#') && length s == 6 && all isHcl s
+  where s = valueFrom hcl
 
 isHcl c = isDigit c || elem c "abcdef"
 
@@ -50,12 +47,12 @@ lastN :: Int -> [a] -> [a]
 lastN n xs = drop (length xs - n) xs
 
 isIyrValid iyr = 2010 <= n && n <= 2020
-  where n = read $ last $ words s
-        s = map clean iyr
+  where n = read $ valueFrom iyr
 
-isPidValid pid = length v == 9 && all isDigit v
-  where v = last $ words s
-        s = map clean pid
+isPidValid pid = length s == 9 && all isDigit s
+  where s = valueFrom pid
+
+valueFrom s = last $ words $ map clean s
 
 clean ':' = ' '
 clean '#' = ' '
