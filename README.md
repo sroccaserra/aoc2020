@@ -37,6 +37,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- With [span][sp] or [break][br] I can split a list with a predicate (see also [takeWhile][tw] and [dropWhile][dw])
 - With [lookup][lu] I can lookup in a dumb association structure (`a -> [(a, b)] -> Maybe b`), not unlike Lisp's [association lists][al]
 - With [mapM_][mm] I can apply print to a list of results:
 
@@ -48,7 +49,7 @@ main = do
 
 - The [interact][in] function passes the input from stdin to a `String -> String` function and prints the result to stdout
 - The [cycle][cy] function turns a finite list to a cycling infinite one
-- The [mapMaybe][mm] function (`(a -> Maybe b) -> [a] -> [b]`)
+- The [mapMaybe][ma] function (`(a -> Maybe b) -> [a] -> [b]`)
 - The [fromEnum][fe] function, used to convert `Bool` to `Int` in day 03
 - The [fromMaybe][fm] function (`a -> Maybe a -> a`)
 - The [ReadP][rp] module & how it works (see refs about parser combinators below)
@@ -56,19 +57,23 @@ main = do
 - The [&][&] operator, works like a pipe operator
 - The `do` notation can be used as a [list comprehension][lc]
 
+[&]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Function.html#v:-38-
 [al]: https://www.gnu.org/software/emacs/manual/html_node/elisp/Association-Lists.html
-[lu]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:lookup
-[mm]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:mapM_
-[in]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:interact
+[br]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:break
 [cy]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:cycle
-[mm]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Maybe.html#v:mapMaybe
+[dw]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:dropWhile
 [fe]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:fromEnum
 [fm]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Maybe.html#v:fromMaybe
-[rp]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Text-ParserCombinators-ReadP.html
-[re]: https://hackage.haskell.org/package/regex-tdfa-1.3.1.0/docs/Text-Regex-TDFA.html
+[in]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:interact
 [lc]: https://wiki.haskell.org/List_comprehension
-[&]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Function.html#v:-38-
+[lu]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:lookup
+[ma]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Maybe.html#v:mapMaybe
+[mm]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:mapM_
+[re]: https://hackage.haskell.org/package/regex-tdfa-1.3.1.0/docs/Text-Regex-TDFA.html
+[rp]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Text-ParserCombinators-ReadP.html
 [rrc]: https://github.com/sroccaserra/aoc2020/commit/f38935c
+[sp]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:span
+[tw]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:takeWhile
 
 ## References
 
