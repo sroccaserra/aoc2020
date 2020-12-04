@@ -40,15 +40,11 @@ isHclValid ('#':s) = length s == 6 && all isHexDigit s
 isHclValid _ = False
 
 isHgtValid :: String -> Bool
-isHgtValid hgt = elem u ["cm", "in"] && ok v u
-  where u = last2 hgt
-        v = read $ filter isDigit hgt ::Int
+isHgtValid hgt = elem u ["cm", "in"] && ok (read s ::Int) u
+  where (s, u) = span isDigit hgt
         ok n "cm" = 150 <= n && n <= 193
         ok n "in" = 59 <= n && n <= 76
         ok _ _ = False
 
 isPidValid :: String -> Bool
 isPidValid s = length s == 9 && all isDigit s
-
-last2 :: [a] -> [a]
-last2 xs = drop (length xs - 2) xs
