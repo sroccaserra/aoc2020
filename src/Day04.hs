@@ -37,14 +37,11 @@ isHclValid hcl = (hcl !! 4 == '#') && length s == 6 && all isHcl s
 isHcl c = isDigit c || elem c "abcdef"
 
 isHgtValid hgt = (isSuffixOf "cm" hgt || isSuffixOf "in" hgt) && ok v u
-  where u = lastN 2 hgt
+  where u = last2 hgt
         v = read $ filter isDigit hgt ::Int
         ok n "cm" = 150 <= n && n <= 193
         ok n "in" = 59 <= n && n <= 76
         ok _ _ = False
-
-lastN :: Int -> [a] -> [a]
-lastN n xs = drop (length xs - n) xs
 
 isIyrValid iyr = 2010 <= n && n <= 2020
   where n = read $ valueFrom iyr
@@ -57,3 +54,5 @@ valueFrom s = last $ words $ map clean s
 clean ':' = ' '
 clean '#' = ' '
 clean c = c
+
+last2 xs = drop (length xs - 2) xs
