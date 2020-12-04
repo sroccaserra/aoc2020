@@ -37,6 +37,14 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- With [mapM_][mm] I can apply print to a list of results:
+
+```haskell
+main = do
+  xs <- fmap lines getContents
+  mapM_ print $ map parseLine xs
+```
+
 - The [interact][in] function passes the input from stdin to a `String -> String` function and prints the result to stdout
 - The [cycle][cy] function turns a finite list to a cycling infinite one
 - The [mapMaybe][mm] function (`(a -> Maybe b) -> [a] -> [b]`)
@@ -47,6 +55,7 @@ $ stack ghci src/DayXX.hs
 - The [&][&] operator, works like a pipe operator
 - The `do` notation can be used as a [list comprehension][lc]
 
+[mm]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:mapM_
 [in]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:interact
 [cy]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:cycle
 [mm]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Maybe.html#v:mapMaybe
