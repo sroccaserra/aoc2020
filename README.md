@@ -37,6 +37,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- With [lookup][lu] I can lookup in a dumb association structure (`a -> [(a, b)] -> Maybe b`), not unlike Lisp's [association lists][al]
 - With [mapM_][mm] I can apply print to a list of results:
 
 ```haskell
@@ -55,6 +56,8 @@ main = do
 - The [&][&] operator, works like a pipe operator
 - The `do` notation can be used as a [list comprehension][lc]
 
+[al]: https://www.gnu.org/software/emacs/manual/html_node/elisp/Association-Lists.html
+[lu]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:lookup
 [mm]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:mapM_
 [in]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:interact
 [cy]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:cycle
