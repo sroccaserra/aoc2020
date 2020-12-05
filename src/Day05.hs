@@ -1,9 +1,10 @@
 module Day05 where
 
 import Data.Bifunctor
+import Data.List
 
 main :: IO ()
-main = interact $ show . partOne . (map parseLine) . lines
+main = interact $ show . partTwo . (map parseLine) . lines
 
 parseLine :: String -> BoardingPass
 parseLine s = bimap f f xs
@@ -18,6 +19,10 @@ fblrToUpOrDown _ = Upper
 
 partOne :: [BoardingPass] -> Int
 partOne xs = foldr max 0 $ map (idNumber . seat) xs
+
+partTwo :: [BoardingPass] -> Int
+partTwo xs = head $ [28..842] \\ ids
+  where ids = map (idNumber . seat) xs
 
 type Seat = (Int, Int)
 type BoardingPass = ([Direction], [Direction])
