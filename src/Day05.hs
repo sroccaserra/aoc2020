@@ -10,5 +10,5 @@ partTwo xs = [minimum ids..maximum ids] \\ ids
   where ids = idNumbers xs
 
 idNumbers = map $ toDec . (map toBin)
-  where toBin c | elem c "FL" = 0 | otherwise = 1
+  where toBin c | elem c "FL" = 0 | True = 1
         toDec = foldl1 $ (+) . (*2)
