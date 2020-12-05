@@ -27,9 +27,7 @@ idNumber :: Seat -> Int
 idNumber (x, y) = x*8 + y
 
 seat :: BoardingPass -> Seat
-seat bp = bimap findRow findColumn bp
-  where findRow = bisectBy 0 127
-        findColumn = bisectBy 0 7
+seat = bimap (bisectBy 0 127) (bisectBy 0 7)
 
 bisectBy :: Int -> Int -> [Direction] -> Int
 bisectBy x _ [] = x
