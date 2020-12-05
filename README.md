@@ -37,6 +37,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- If I have a list of `0`s and `1`s, I can convert them to decimal numbers with `foldl1' $ (+) . (*2)`
 - With [span][sp] or [break][br] I can split a list with a predicate (see also [takeWhile][tw] and [dropWhile][dw])
 - With [lookup][lu] I can lookup in a dumb association structure (`a -> [(a, b)] -> Maybe b`), not unlike Lisp's [association lists][al]
 - With [mapM_][mm] I can apply print to a list of results:
