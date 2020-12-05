@@ -7,7 +7,7 @@ main :: IO ()
 main = interact $ show . partTwo . (map parseLine) . lines
 
 parseLine :: String -> BoardingPass
-parseLine = bimap (map dir) (map dir) . span (flip elem "FB")
+parseLine = bimap (map dir) (map dir) . splitAt 7
   where dir c | elem c "FL" = Lower
               | otherwise = Upper
 
