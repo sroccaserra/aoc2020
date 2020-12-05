@@ -21,7 +21,7 @@ dependencies:
 library:
   source-dirs: src
   ghc-options:
-  - -Wall
+  - -W
 
 tests:
   aoc2020-test:
