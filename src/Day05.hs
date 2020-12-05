@@ -1,38 +1,23 @@
 module Day05 where
 
-import Data.Bifunctor
+import Data.Bifunctor (bimap)
+import Data.Char (digitToInt)
 import Data.List
 
-main :: IO ()
 main = interact $ show . partTwo . (map parseLine) . lines
 
-parseLine :: String -> BoardingPass
 parseLine = bimap (map dir) (map dir) . splitAt 7
-  where dir c | elem c "FL" = Lower
-              | otherwise = Upper
+  where dir c | elem c "FL" = '0'
+              | otherwise = '1'
 
-partOne :: [BoardingPass] -> Int
 partOne xs = maximum $ map (idNumber . seat) xs
 
-partTwo :: [BoardingPass] -> Int
 partTwo xs = head $ [minimum ids..maximum ids] \\ ids
   where ids = map (idNumber . seat) xs
 
-type Seat = (Int, Int)
-type BoardingPass = ([Direction], [Direction])
-data Direction = Lower | Upper
-               deriving (Show)
-
-idNumber :: Seat -> Int
 idNumber (x, y) = x*8 + y
 
-seat :: BoardingPass -> Seat
-seat = bimap (bisectBy 0 127) (bisectBy 0 7)
+seat = bimap toDec toDec
 
-bisectBy :: Int -> Int -> [Direction] -> Int
-bisectBy x _ [] = x
-bisectBy x y (Upper:rest) = bisectBy (mid x y) y rest
-bisectBy x y (Lower:rest) = bisectBy x ((mid x y) -1) rest
-
-mid :: Int -> Int -> Int
-mid x y = x + (div (y+1-x) 2)
+toDec :: String -> Int
+toDec = foldl' (\acc x -> acc * 2 + digitToInt x) 0
