@@ -2,13 +2,12 @@ module Day05 where
 
 import Data.List
 
-main = interact $ show . partTwo . lines
+main = interact $ show .part2 . lines
 
-partOne = maximum . idNumbers
+part1 = maximum . ids
 
-partTwo xs = [minimum ids..maximum ids] \\ ids
-  where ids = idNumbers xs
+part2 xs = [minimum $ ids xs..maximum $ ids xs] \\ ids xs
 
-idNumbers = map $ toD . (map toB)
-  where toB = fromEnum . flip elem "BR"
-        toD = foldl1 $ (+) . (*2)
+ids = map $ toDec . toBin
+  where toBin = map $ fromEnum . flip elem "BR"
+        toDec = foldl1 $ (+) . (*2)
