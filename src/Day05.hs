@@ -12,13 +12,11 @@ parseLine = bimap (map dir) (map dir) . splitAt 7
               | otherwise = Upper
 
 partOne :: [BoardingPass] -> Int
-partOne xs = foldr max 0 $ map (idNumber . seat) xs
+partOne xs = maximum $ map (idNumber . seat) xs
 
 partTwo :: [BoardingPass] -> Int
-partTwo xs = head $ [i..j] \\ ids
+partTwo xs = head $ [minimum ids..maximum ids] \\ ids
   where ids = map (idNumber . seat) xs
-        j = foldr max 0 ids
-        i = foldr min j ids
 
 type Seat = (Int, Int)
 type BoardingPass = ([Direction], [Direction])
