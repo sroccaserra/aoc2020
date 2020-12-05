@@ -1,14 +1,14 @@
 module Day05 where
 
-import Data.List ((\\))
+import Data.List
 
 main = interact $ show . partTwo . lines
 
-partOne xs = maximum $ map idNumber xs
+partOne = maximum . idNumbers
 
 partTwo xs = [minimum ids..maximum ids] \\ ids
-  where ids = map idNumber xs
+  where ids = idNumbers xs
 
-idNumber = toDec . (map toBin)
+idNumbers = map $ toDec . (map toBin)
   where toBin c | elem c "FL" = 0 | otherwise = 1
         toDec = foldl1 $ (+) . (*2)
