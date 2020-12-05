@@ -7,15 +7,9 @@ main :: IO ()
 main = interact $ show . partTwo . (map parseLine) . lines
 
 parseLine :: String -> BoardingPass
-parseLine s = bimap f f xs
-  where xs = span (flip elem "FB") s
-        f = map fblrToUpOrDown
-
-fblrToUpOrDown :: Char -> Direction
-fblrToUpOrDown 'F' = Lower
-fblrToUpOrDown 'B' = Upper
-fblrToUpOrDown 'L' = Lower
-fblrToUpOrDown _ = Upper
+parseLine = bimap (map dir) (map dir) . span (flip elem "FB")
+  where dir c | elem c "FL" = Lower
+              | otherwise = Upper
 
 partOne :: [BoardingPass] -> Int
 partOne xs = foldr max 0 $ map (idNumber . seat) xs
