@@ -37,6 +37,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- How to print & debug: <https://wiki.haskell.org/Debugging>
 - Use [nub][nu] to remove duplicates in a list (no need to sort, but beware n²)
 - Use [concat][cc] instead of `foldl1 (++)`
 - Instead of `foldl max 0 xs` I can use `foldl1 max xs` and even better, `maximum xs`.
