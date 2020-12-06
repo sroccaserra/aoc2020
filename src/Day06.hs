@@ -7,7 +7,7 @@ main = interact $ show . sum . map partTwo . groupByEmptyLines . lines
 groupByEmptyLines = filter (/= [""]) . groupBy (\x y -> x /= "" && y /= "")
 
 partOne :: [String] -> Int
-partOne = length . groupBy (==) . sort . concat
+partOne = length . nub . concat
 
 partTwo :: [String] -> Int
 partTwo = countValid . stats

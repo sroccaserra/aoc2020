@@ -37,6 +37,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- Use [nub][nu] to remove duplicates in a list (no need to sort, but beware n²)
 - Use [concat][cc] instead of `foldl1 (++)`
 - Instead of `foldl max 0 xs` I can use `foldl1 max xs` and even better, `maximum xs`.
 - If I have a list of `0`s and `1`s, I can convert them to decimal numbers with `foldl1' $ (+) . (*2)`
@@ -73,6 +74,7 @@ main = do
 [lu]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:lookup
 [ma]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Maybe.html#v:mapMaybe
 [mm]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:mapM_
+[nu]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-List.html#v:nub
 [re]: https://hackage.haskell.org/package/regex-tdfa-1.3.1.0/docs/Text-Regex-TDFA.html
 [rp]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Text-ParserCombinators-ReadP.html
 [rrc]: https://github.com/sroccaserra/aoc2020/commit/f38935c
