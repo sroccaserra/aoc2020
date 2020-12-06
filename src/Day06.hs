@@ -1,8 +1,10 @@
 module Day06 where
 
 import Data.List
+import Data.Bifunctor
 
-main = interact $ show . partTwo . groupByEmptyLines
+main = interact $ show . bimap partOne partTwo . dup . groupByEmptyLines
+  where dup x = (x,x)
 
 groupByEmptyLines = filter (/= [""]) . groupBy (\x y -> x /= "" && y /= "") . lines
 
