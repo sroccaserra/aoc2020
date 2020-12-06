@@ -4,14 +4,14 @@ import Data.List
 
 main = interact $ show . partTwo . lines
 
-partOne xs = sum $ map countAnswers xs
+partOne = sum . map countAnswers
 
-partTwo xs = sum $ map countValid $ stats $ answersByPerson xs
+partTwo = sum . map countValid . map stats . answersByPerson
 
 countAnswers = length . groupBy (==) . sort . (filter $ not . (== ' '))
 
 answersByPerson = map words
 
-stats xs = map (\ group -> (length group, map length $ groupBy (==) $ sort $ foldl1 (++) group)) xs
+stats group = (length group, map length $ groupBy (==) $ sort $ foldl1 (++) group)
 
 countValid (x, ys) = length $ filter (== x) ys
