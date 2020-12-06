@@ -2,16 +2,12 @@ module Day06 where
 
 import Data.List
 
-main = interact $ show . sum . map partTwo . groupByEmptyLines . lines
+main = interact $ show . partTwo . groupByEmptyLines
 
-groupByEmptyLines = filter (/= [""]) . groupBy (\x y -> x /= "" && y /= "")
+groupByEmptyLines = filter (/= [""]) . groupBy (\x y -> x /= "" && y /= "") . lines
 
-partOne :: [String] -> Int
-partOne = length . nub . concat
+partOne :: [[String]] -> Int
+partOne = sum . (map $ length . foldl1 union)
 
-partTwo :: [String] -> Int
-partTwo = countValid . stats
-
-stats group = (length group, map length $ groupBy (==) $ sort $ concat group)
-
-countValid (x, ys) = length $ filter (== x) ys
+partTwo :: [[String]] -> Int
+partTwo = sum . (map $ length . foldl1 intersect)
