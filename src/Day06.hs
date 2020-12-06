@@ -1,14 +1,10 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Day06 where
 
 import Data.List
-import Data.List.Extra
-import qualified Data.Text as T
 
-main = interact $ show . partTwo . groupByEmptyLines . trimEnd
+main = interact $ show . partTwo . groupByEmptyLines . lines
 
-groupByEmptyLines = map (map T.unpack) . (map $ T.splitOn "\n") . (T.splitOn "\n\n") . T.pack
+groupByEmptyLines = filter (/= [""]) . groupBy (\x y -> x /= "" && y /= "")
 
 partOne = sum . map countAnswers
 
