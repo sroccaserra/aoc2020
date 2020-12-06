@@ -1,15 +1,16 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Day06 where
 
 import Data.List
 import Data.Bifunctor
+import qualified Data.Text as T
 
-main = interact $ show . bimap partOne partTwo . dup . groupByEmptyLines
+main = interact $ show . bimap partOne partTwo . dup . parseInput
   where dup x = (x,x)
 
-groupByEmptyLines = filter (/= [""]) . groupBy (\x y -> x /= "" && y /= "") . lines
+parseInput = map lines . map T.unpack . T.splitOn "\n\n" . T.pack
 
-partOne :: [[String]] -> Int
 partOne = sum . (map $ length . foldl1 union)
 
-partTwo :: [[String]] -> Int
 partTwo = sum . (map $ length . foldl1 intersect)

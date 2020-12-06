@@ -37,6 +37,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- A Text is not a List, like a String is: you can't use Data.List functions on a Text.
 - How to print & debug: <https://wiki.haskell.org/Debugging>
 - Use [nub][nu] to remove duplicates in a list (no need to sort, but beware n²)
 - Use [concat][cc] instead of `foldl1 (++)`
