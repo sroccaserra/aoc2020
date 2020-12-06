@@ -1,5 +1,5 @@
 #!/usr/bin/env gawk -f
 
-/^$/ { print l ; l = "" }
-/.+/ { l = l" "$0 }
-END { print l }
+/./ { line = line" "$0 }
+/^$/ { print line ; line = "" }
+END { print line }
