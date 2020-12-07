@@ -21,7 +21,7 @@ parseQuantity x = (ws !!1, read (T.unpack $ ws !! 0))
 
 partOne m = length $ filter id $ map (\x -> canContainShinyGold m (fst x)) m
 
-partTwo m = (countBags m $ lookup "shiny_gold" m) - 1
+partTwo m = (countBags m $ findQuantities m "shiny_gold") - 1
 
 type Quantity = (T.Text, Int)
 
@@ -35,8 +35,10 @@ canContainShinyGold m c | Just [] == lookup c m = False
 canContainShinyGold m c = any (canContainShinyGold m) xs
   where xs = map fst $ fromJust $ lookup c m
 
-countBags :: [(T.Text, [Quantity])] -> Maybe [Quantity] -> Int
-countBags m (Just qs) = 1 + sum xs
+countBags :: [(T.Text, [Quantity])] ->[Quantity] -> Int
+countBags _ [] = 1
+countBags m qs = 1 + sum xs
   where xs::[Int]
-        xs = map (\q -> (snd q) * (countBags m (lookup (fst q) m))) qs
-countBags _ Nothing = 1
+        xs = map (\q -> (snd q) * (countBags m (findQuantities m (fst q)))) qs
+
+findQuantities m s = fromMaybe [] $ lookup s m
