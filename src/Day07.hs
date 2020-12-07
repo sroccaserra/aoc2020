@@ -16,7 +16,7 @@ parseQuantities xs = ((xs !! 0), qs)
 
 parseQuantity :: T.Text -> Quantity
 parseQuantity "" = ("", 0)
-parseQuantity x = (ws !!1, read (T.unpack $ ws !! 0))
+parseQuantity x = (ws !! 1, read (T.unpack $ ws !! 0))
   where ws = T.words x
 
 partOne m = length $ filter id $ map (\x -> canContainShinyGold m (fst x)) m
@@ -39,6 +39,6 @@ countBags :: [(T.Text, [Quantity])] ->[Quantity] -> Int
 countBags _ [] = 1
 countBags m qs = 1 + sum xs
   where xs::[Int]
-        xs = map (\q -> (snd q) * (countBags m (findQuantities m (fst q)))) qs
+        xs = map (\(s,n) -> n * (countBags m (findQuantities m s))) qs
 
 findQuantities m s = fromMaybe [] $ lookup s m
