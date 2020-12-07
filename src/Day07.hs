@@ -37,8 +37,7 @@ canContainShinyGold m c = any (canContainShinyGold m) xs
 
 countBags :: [(T.Text, [Quantity])] ->[Quantity] -> Int
 countBags _ [] = 1
-countBags m qs = 1 + sum xs
-  where xs::[Int]
-        xs = map (\(s,n) -> n * (countBags m (findQuantities m s))) qs
+countBags m qs = succ $ foldl acc 0 qs
+  where acc a (s, n) = a + n * (countBags m (findQuantities m s))
 
 findQuantities m s = fromMaybe [] $ lookup s m
