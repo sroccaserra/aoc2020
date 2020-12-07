@@ -3,30 +3,30 @@
 module Day07 where
 
 import Data.Maybe
-import qualified Data.Text as T
+import Data.List.Split
 
 main = interact $ show . partTwo . (map parseLine) . lines
 
 parseLine :: String -> Rule
-parseLine = parseQuantities . T.splitOn ":" . T.pack
+parseLine = parseQuantities . splitOn ":"
 
-parseQuantities :: [T.Text] -> Rule
+parseQuantities :: [String] -> Rule
 parseQuantities xs = ((xs !! 0), qs)
-  where qs = (filter $ (/= 0) . snd) $ map parseQuantity $ T.splitOn "," $ xs !! 1
+  where qs = (filter $ (/= 0) . snd) $ map parseQuantity $ splitOn "," $ xs !! 1
 
-parseQuantity :: T.Text -> Quantity
+parseQuantity :: String -> Quantity
 parseQuantity "" = ("", 0)
-parseQuantity x = (ws !! 1, read (T.unpack $ ws !! 0))
-  where ws = T.words x
+parseQuantity x = (ws !! 1, read (ws !! 0))
+  where ws = words x
 
 partOne m = sum $ map (\(s,_) -> fromEnum $ containShinyGold m s) m
 
 partTwo m = (countBags m $ findQuantities m "shiny_gold") - 1
 
-type Quantity = (T.Text, Int)
-type Rule = (T.Text, [Quantity])
+type Quantity = (String, Int)
+type Rule = (String, [Quantity])
 
-containShinyGold :: [Rule] -> T.Text -> Bool
+containShinyGold :: [Rule] -> String -> Bool
 containShinyGold m s | isJust $ lookup "shiny_gold" $ findQuantities m s = True
 containShinyGold m s | [] == findQuantities m s = False
 containShinyGold m s = any (containShinyGold m) xs
