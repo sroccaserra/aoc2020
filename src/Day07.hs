@@ -19,20 +19,17 @@ parseQuantity "" = ("", 0)
 parseQuantity x = (ws !! 1, read (T.unpack $ ws !! 0))
   where ws = T.words x
 
-partOne m = length $ filter id $ map (\x -> canContainShinyGold m (fst x)) m
+partOne m = sum $ map (\(s,_) -> fromEnum $ containShinyGold m s) m
 
 partTwo m = (countBags m $ findQuantities m "shiny_gold") - 1
 
 type Quantity = (T.Text, Int)
 type Rule = (T.Text, [Quantity])
 
-containsShinyGoldDirect :: [Quantity] -> Bool
-containsShinyGoldDirect = isJust . lookup "shiny_gold"
-
-canContainShinyGold :: [Rule] -> T.Text -> Bool
-canContainShinyGold m s | containsShinyGoldDirect $ findQuantities m s = True
-canContainShinyGold m s | [] == findQuantities m s = False
-canContainShinyGold m s = any (canContainShinyGold m) xs
+containShinyGold :: [Rule] -> T.Text -> Bool
+containShinyGold m s | isJust $ lookup "shiny_gold" $ findQuantities m s = True
+containShinyGold m s | [] == findQuantities m s = False
+containShinyGold m s = any (containShinyGold m) xs
   where xs = map fst $ findQuantities m s
 
 countBags :: [Rule] -> [Quantity] -> Int
