@@ -26,15 +26,14 @@ partTwo m = (countBags m $ findQuantities m "shiny_gold") - 1
 type Quantity = (T.Text, Int)
 type Rule = (T.Text, [Quantity])
 
-containsShinyGoldDirect (Just xs) = isJust $ lookup "shiny_gold" xs
-containsShinyGoldDirect Nothing = False
+containsShinyGoldDirect :: [Quantity] -> Bool
+containsShinyGoldDirect = isJust . lookup "shiny_gold"
 
 canContainShinyGold :: [Rule] -> T.Text -> Bool
-canContainShinyGold m c | containsShinyGoldDirect $ lookup c m = True
-canContainShinyGold m c | Nothing == lookup c m = False
-canContainShinyGold m c | Just [] == lookup c m = False
-canContainShinyGold m c = any (canContainShinyGold m) xs
-  where xs = map fst $ fromJust $ lookup c m
+canContainShinyGold m s | containsShinyGoldDirect $ findQuantities m s = True
+canContainShinyGold m s | [] == findQuantities m s = False
+canContainShinyGold m s = any (canContainShinyGold m) xs
+  where xs = map fst $ findQuantities m s
 
 countBags :: [Rule] -> [Quantity] -> Int
 countBags _ [] = 1
