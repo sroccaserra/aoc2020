@@ -14,4 +14,4 @@ spec =
       let prg = fromList [(Acc, 5)]
       let m = Machine prg 0 0
 
-      execPrg S.empty m `shouldBe` Machine prg 1 5
+      exec S.empty m `shouldBe` Machine prg 1 5
