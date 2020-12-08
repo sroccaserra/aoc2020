@@ -25,8 +25,16 @@ $ echo -e "1: 2,3\n2: 3,4\n3: 5,6" | stack runhaskell -- src/DayXX
 
 ## Tests
 
+Run a single test:
+
 ```
-$ stack test --file-watch
+$ stack runhaskell -- -isrc test/DayXXSpec
+```
+
+Run all tests:
+
+```
+$ stack test
 ```
 
 ## Repl
@@ -37,6 +45,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- If I declare both a `main = hspec spec` and a `spec` functions in a test file, I can run them either individually or all.
 - For Int indexed values, [Vector][ve] seems more useful than [Array][ar]
 - A Text is not a List, like a String is: you can't use Data.List functions on a Text.
 - How to print & debug: <https://wiki.haskell.org/Debugging>
