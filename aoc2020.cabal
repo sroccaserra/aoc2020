@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c46fbfbd9e42832e4e1467d207fa4b74f871da477255646739640a50aedd9b33
+-- hash: 67d32fe7dba8118ab40f58d49c51a5e2e2fd253a2fa48c4000c54b5a4ef95df1
 
 name:           aoc2020
 version:        0.1.0.0
@@ -53,6 +53,7 @@ test-suite aoc2020-test
   main-is: Spec.hs
   other-modules:
       Day02Spec
+      Day08Spec
       DayXXSpec
       Paths_aoc2020
   hs-source-dirs:
@@ -61,5 +62,7 @@ test-suite aoc2020-test
   build-depends:
       aoc2020
     , base >=4.7 && <5
+    , containers >=0.6.2.1 && <0.7
     , hspec >=2.7.4 && <3
+    , vector >=0.12.1.2 && <0.13
   default-language: Haskell2010

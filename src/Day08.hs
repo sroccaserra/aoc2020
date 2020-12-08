@@ -24,12 +24,14 @@ partTwo xs = findHaltingPrg prg 0 $ Machine prg 0 0
 
 type Instruction = (Operation, Int)
 data Operation = Jmp | Acc | Nop
-               deriving (Show)
+               deriving (Eq,Show)
 
 data Machine = Machine (Vector Instruction) Int Int
+             deriving (Eq)
 
 instance Show Machine where
-    show (Machine prg pc acc) = show (pc, acc, prg ! pc)
+    show (Machine prg pc acc) | pc < length prg = show (pc, acc, prg ! pc)
+    show (Machine prg pc acc) = "Ended: " ++ show (pc, acc, prg ! (pc -1))
 
 execPrg :: S.Set Int -> Machine -> Machine
 execPrg s m | isLooping s m = m
@@ -46,7 +48,7 @@ findHaltingPrg :: Vector Instruction -> Int -> Machine -> Machine
 findHaltingPrg _ _ m | hasEnded m = m
 findHaltingPrg prg n _ = findHaltingPrg prg (n+1) $ execPrg S.empty $ mutate (n+1) $ Machine prg 0 0
 
-hasEnded (Machine prg pc _) = length prg == succ pc
+hasEnded (Machine prg pc _) = length prg == pc
 
 isLooping s (Machine _ pc _) = S.member pc s
 
