@@ -23,10 +23,10 @@ library:
   ghc-options:
   - -W
   dependencies:
-  - array >= 0.5.4.0 && < 0.6
   - containers >= 0.6.2.1 && < 0.7
   - split >= 0.2.3.4 && < 0.3
   - text >= 1.2.4.0 && < 1.3
+  - vector >= 0.12.1.2 && < 0.13
 
 tests:
   aoc2020-test:

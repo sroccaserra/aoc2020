@@ -37,6 +37,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- For Int indexed values, [Vector][ve] seems more useful than [Array][ar]
 - A Text is not a List, like a String is: you can't use Data.List functions on a Text.
 - How to print & debug: <https://wiki.haskell.org/Debugging>
 - Use [nub][nu] to remove duplicates in a list (no need to sort, but beware n²)
@@ -65,6 +66,7 @@ main = do
 
 [&]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Function.html#v:-38-
 [al]: https://www.gnu.org/software/emacs/manual/html_node/elisp/Association-Lists.html
+[ar]: https://hackage.haskell.org/package/array
 [br]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:break
 [cc]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:concat
 [cy]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:cycle
@@ -82,6 +84,7 @@ main = do
 [rrc]: https://github.com/sroccaserra/aoc2020/commit/f38935c
 [sp]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:span
 [tw]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:takeWhile
+[ve]: https://hackage.haskell.org/package/vector-0.12.1.2
 
 ## References
 
