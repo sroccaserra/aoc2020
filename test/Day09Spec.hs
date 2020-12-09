@@ -16,9 +16,6 @@ spec =
       previousNs 5 5 firstExample `shouldBe` V.fromList [35, 20, 15, 25, 47]
       previousNs 5 14 firstExample `shouldBe` V.fromList [95, 102, 117, 150, 182]
 
-    it "generates indexes to iterate from" $ do
-      generateIndexes 5 firstExample `shouldBe` [5..pred $ V.length firstExample]
-
     it "finds a matching sum" $ do
       hasMatchingSum 5 firstExample 5 `shouldBe` True
       hasMatchingSum 5 firstExample 6 `shouldBe` True

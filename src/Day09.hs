@@ -2,18 +2,15 @@ module Day09 where
 
 import qualified Data.Vector as V
 
-main = interact $ show . partOne . V.fromList . (map parseLine) . lines
+main = interact $ show . partOne . V.fromList . (map read) . lines
 
-parseLine :: String -> Int
-parseLine = read
+partOne v = findInvalidNumbers 25 v V.! 0
 
-partOne v = V.ifilter (\i _ -> not $ hasMatchingSum 25 v $ i+25) candidates
-  where candidates = V.slice 25 ((V.length v) - 25) v
+findInvalidNumbers n v = V.ifilter (\i _ -> not $ hasMatchingSum n v $ i+n) candidates
+  where candidates = V.slice n ((V.length v) - n) v
 
 previousNs :: Int -> Int -> V.Vector Int -> V.Vector Int
 previousNs n i v = V.slice (i-n) n v
-
-generateIndexes n v = [n..pred $ V.length v]
 
 hasMatchingSum :: Int -> V.Vector Int -> Int -> Bool
 hasMatchingSum n v i = elem (v V.! i) sums
