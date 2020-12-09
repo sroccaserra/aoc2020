@@ -1,3 +1,5 @@
+{-# LANGUAGE MonadComprehensions #-}
+
 module Day09 where
 
 import Data.Vector (Vector, (!), fromList, ifilter, slice)
@@ -20,10 +22,7 @@ previousNs n i v = slice (i-n) n v
 hasMatchingSum :: Int -> Vector Int -> Int -> Bool
 hasMatchingSum n v i = elem (v ! i) sums
   where ns = previousNs n i v
-        sums = do
-          i <- ns
-          j <- ns
-          return $ i + j
+        sums = [i+j | i <- ns, j <- ns]
 
 findContiguousSum v n i = filter ((== n) . sum) $ possibleSlices v i
 
