@@ -25,7 +25,8 @@ spec =
       computeDifferences exampleShort `shouldBe` [3,1,1,1,3,1,1,3,1,3]
 
     it "computeDifferences of longer example" $ do
-      take 12 (computeDifferences exampleLonger) `shouldBe` [1,1,1,3,1,1,1,1,3,3,1,1]
+      computeDifferences exampleLonger `shouldBe`
+        [1,1,1,3,1,1,1,1,3,3,1,1,1,3,1,1,3,3,1,1,1,1,3,1,3,3,1,1,1,1]
 
     it "checks length" $ do
       length exampleShort `shouldBe` 11
@@ -34,5 +35,24 @@ spec =
       length exampleLonger `shouldBe` 31
       length (computeDifferences exampleLonger) `shouldBe` 30
 
-    it "finds 35 for short example" $ do
+    it "finds 35 for part one with short example" $ do
       partOne exampleShort `shouldBe` 35
+
+    it "has two possibilities for two 1s surrounded by 3s" $ do
+      computeDifferences [1,4,5,6,9] `shouldBe` [3,1,1,3]
+      computeDifferences [1,4,6,9] `shouldBe` [3,2,3]
+
+    it "has four possibilities for three 1s surrounded by 3s" $ do
+      computeDifferences [1,4,5,6,7,10] `shouldBe` [3,1,1,1,3]
+      computeDifferences [1,4,5,7,10] `shouldBe` [3,1,2,3]
+      computeDifferences [1,4,6,7,10] `shouldBe` [3,2,1,3]
+      computeDifferences [1,4,7,10] `shouldBe` [3,3,3]
+
+    it "has seven possibilities for four 1s surrounded by 3s" $ do
+      computeDifferences [1,4,5,6,7,8,11] `shouldBe` [3,1,1,1,1,3]
+      computeDifferences [1,4,5,6,8,11] `shouldBe` [3,1,1,2,3]
+      computeDifferences [1,4,5,7,8,11] `shouldBe` [3,1,2,1,3]
+      computeDifferences [1,4,6,7,8,11] `shouldBe` [3,2,1,1,3]
+      computeDifferences [1,4,6,8,11] `shouldBe` [3,2,2,3]
+      computeDifferences [1,4,5,8,11] `shouldBe` [3,1,3,3]
+      computeDifferences [1,4,7,8,11] `shouldBe` [3,3,1,3]
