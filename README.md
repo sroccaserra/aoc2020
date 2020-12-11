@@ -37,6 +37,12 @@ Run all tests:
 $ stack test
 ```
 
+## Building
+
+```
+$ stack ghc -- -main-is DayXX src/DayXX.hs
+```
+
 ## Repl
 
 ```
