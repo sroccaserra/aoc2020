@@ -144,7 +144,7 @@ spec =
       stepUntilStable stepSeat exampleRoom `shouldBe` lastStep
 
     it "counts occupied seats in a room" $ do
-      countEmptyRoomSeats lastStep `shouldBe` 37
+      countEmptySeats lastStep `shouldBe` 37
 
     it "sees a seat following a slope" $ do
       seeSeat room1 (0,0) (1,0) `shouldBe` Just 'L'

@@ -5,8 +5,8 @@ import Data.Vector (Vector, length, fromList, toList, imap, (!))
 
 main = interact $ show . partTwo . lines
 
-partOne = countEmptyRoomSeats . stepUntilStable stepSeat . asRoom
-partTwo = countEmptyRoomSeats . stepUntilStable stepSeat' . asRoom
+partOne = countEmptySeats . stepUntilStable stepSeat . asRoom
+partTwo = countEmptySeats . stepUntilStable stepSeat' . asRoom
 
 type Room = Vector Row
 type Row = Vector Char
@@ -20,7 +20,7 @@ height r = Data.Vector.length r
 
 directions = [(x,y) | x <- [-1..1], y <- [-1..1], (x,y) /= (0,0)]
 
-countEmptyRoomSeats room = occupiedSeats s
+countEmptySeats room = occupiedSeats s
   where s = concat $ map toList $ toList room
 
 stepUntilStable f room = if room == next then room else stepUntilStable f next
