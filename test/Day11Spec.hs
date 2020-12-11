@@ -117,31 +117,31 @@ spec =
       seat (asRoom ["123","456","789"]) 1 1 `shouldBe` Just '5'
 
     it "finds adjacent seat" $ do
-      adjacentSeats (asRoom["123","456","789"]) 1 1 `shouldBe` "12346789"
-      adjacentSeats (asRoom["123","456","789"]) 0 0 `shouldBe` "245"
-      adjacentSeats (asRoom["123","456","789"]) 2 2 `shouldBe` "568"
+      adjacentSeats (asRoom["123","456","789"]) 1 1 `shouldBe` "14728369"
+      adjacentSeats (asRoom["123","456","789"]) 0 0 `shouldBe` "425"
+      adjacentSeats (asRoom["123","456","789"]) 2 2 `shouldBe` "586"
 
     it "steps a seat" $ do
       stepSeat room1 0 0 `shouldBe` '#'
 
     it "generates next step" $ do
-      step room1 `shouldBe` asRoom ["###","###","###"]
-      (step step1) ! 0  `shouldBe` fromList "#.LL.L#.##"
+      step stepSeat room1 `shouldBe` asRoom ["###","###","###"]
+      (step stepSeat step1) ! 0  `shouldBe` fromList "#.LL.L#.##"
 
     it "check step 2 computation" $ do
-      adjacentSeats step1 0 0 `shouldBe` ".##"
+      adjacentSeats step1 0 0 `shouldBe` "#.#"
       occupiedSeats (adjacentSeats step1 0 0) `shouldBe` 2
       4 <= (occupiedSeats (adjacentSeats step1 0 0)) `shouldBe` False
 
     it "generates steps for example room" $ do
-      step exampleRoom `shouldBe` step1
-      step step1 `shouldBe` step2
-      step step2 `shouldBe` step3
-      step step5 `shouldBe` lastStep
-      step lastStep `shouldBe` lastStep
+      step stepSeat exampleRoom `shouldBe` step1
+      step stepSeat step1 `shouldBe` step2
+      step stepSeat step2 `shouldBe` step3
+      step stepSeat step5 `shouldBe` lastStep
+      step stepSeat lastStep `shouldBe` lastStep
 
     it "steps until stale" $ do
-      stepUntilStable exampleRoom `shouldBe` lastStep
+      stepUntilStable stepSeat exampleRoom `shouldBe` lastStep
 
     it "counts occupied seats in a room" $ do
       countEmptyRoomSeats lastStep `shouldBe` 37
@@ -158,4 +158,4 @@ spec =
       visibleSeats room3 1 1 `shouldBe` "14728369"
 
     it "steps with visible seats" $ do
-      step' step1' `shouldBe` step2'
+      step stepSeat' step1' `shouldBe` step2'
