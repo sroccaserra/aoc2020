@@ -61,7 +61,7 @@ visibleSeats :: Room -> Int -> Int -> String
 visibleSeats room x y = catMaybes $ map (seeSeat room x y) directions
 
 seat :: Room -> Int -> Int -> Maybe Char
-seat room x y | x < 0 || y < 0 || x >= w || y >= h = Nothing
+seat room x y | isOutOfBound w h x y = Nothing
   where w = width room
         h = height room
 seat room x y = Just $ (room ! y) ! x
@@ -71,6 +71,8 @@ seeSeat room x y slope = seeSeat' w h room (x + (fst slope)) (y + (snd slope)) s
         h = height room
 
 seeSeat' :: Int -> Int -> Room -> Int -> Int -> (Int, Int) -> Maybe Char
-seeSeat' w h _ x y _ | x >= w || x < 0  || y >= h || y < 0 = Nothing
+seeSeat' w h _ x y _ | isOutOfBound w h x y = Nothing
 seeSeat' w h room x y slope = if Just '.' /= c then c else  seeSeat' w h room (x + (fst slope)) (y + (snd slope)) slope
   where c = seat room x y
+
+isOutOfBound w h x y = x < 0 || x >= w || y < 0 || y >= h
