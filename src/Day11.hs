@@ -44,14 +44,14 @@ stepSeat' room x y =
        c -> c
   where c = fromJust $ seat room x y
 
-occupiedSeats :: String -> Int
+occupiedSeats :: [Char] -> Int
 occupiedSeats xs = Prelude.length $ filter (== '#') xs
 
-adjacentSeats :: Room -> Int -> Int -> String
+adjacentSeats :: Room -> Int -> Int -> [Char]
 adjacentSeats room x y = catMaybes $ map (uncurry $ seat room) xys
   where xys = [(x+i,y+j) | (i,j) <- directions]
 
-visibleSeats :: Room -> Int -> Int -> String
+visibleSeats :: Room -> Int -> Int -> [Char]
 visibleSeats room x y = catMaybes $ map (seeSeat room x y) directions
 
 seat :: Room -> Int -> Int -> Maybe Char
