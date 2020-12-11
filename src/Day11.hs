@@ -18,7 +18,7 @@ asRoom = fromList . map fromList
 width r = Data.Vector.length (r!0)
 height r = Data.Vector.length r
 
-directions = [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
+directions = [(x,y) | x <- [-1..1], y <- [-1..1], (x,y) /= (0,0)]
 
 countEmptyRoomSeats room = occupiedSeats s
   where s = concat $ map toList $ toList room

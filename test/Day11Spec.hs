@@ -14,9 +14,9 @@ room2 = asRoom [ "0.."
                , "..L"
                , "123" ]
 
-room3 = asRoom [ "678"
-               , "5.1"
-               , "432" ]
+room3 = asRoom [ "123"
+               , "4.6"
+               , "789" ]
 
 exampleRoom = asRoom [
   "L.LL.LL.LL",
@@ -154,8 +154,8 @@ spec =
       seeSeat room2 0 0 (1,1) `shouldBe` Just '3'
 
     it "finds visible seats" $ do
-      visibleSeats room3 0 0 `shouldBe` "725"
-      visibleSeats room3 1 1 `shouldBe` "12345678"
+      visibleSeats room3 0 0 `shouldBe` "429"
+      visibleSeats room3 1 1 `shouldBe` "14728369"
 
     it "steps with visible seats" $ do
       step' step1' `shouldBe` step2'
