@@ -114,7 +114,7 @@ step2' = asRoom ["#.LL.LL.L#"
 spec =
   describe "Day 11" $ do
     it "finds a seat" $ do
-      seat (asRoom ["123","456","789"]) 1 1 `shouldBe` "5"
+      seat (asRoom ["123","456","789"]) 1 1 `shouldBe` Just '5'
 
     it "finds adjacent seat" $ do
       adjacentSeats (asRoom["123","456","789"]) 1 1 `shouldBe` "12346789"
@@ -147,14 +147,14 @@ spec =
       countEmptyRoomSeats lastStep `shouldBe` 37
 
     it "sees a seat following a slope" $ do
-      seeSeat room1 0 0 (1,0) `shouldBe` 'L'
+      seeSeat room1 0 0 (1,0) `shouldBe` Just 'L'
 
-      seeSeat room2 0 0 (1,0) `shouldBe` '.'
-      seeSeat room2 0 0 (0,1) `shouldBe` '1'
-      seeSeat room2 0 0 (1,1) `shouldBe` '3'
+      seeSeat room2 0 0 (1,0) `shouldBe` Nothing
+      seeSeat room2 0 0 (0,1) `shouldBe` Just '1'
+      seeSeat room2 0 0 (1,1) `shouldBe` Just '3'
 
     it "finds visible seats" $ do
-      visibleSeats room3 0 0 `shouldBe` "725....."
+      visibleSeats room3 0 0 `shouldBe` "725"
       visibleSeats room3 1 1 `shouldBe` "12345678"
 
     it "steps with visible seats" $ do
