@@ -23,16 +23,26 @@ countEmptyRoomSeats room = occupiedSeats s
 stepUntilStale room = if room == next then room else stepUntilStale next
   where next = step room
 
-stepUntilStale' = stepUntilStale
+stepUntilStale' room = if room == next then room else stepUntilStale' next
+  where next = step' room
 
-step :: Room -> Room
 step room = imap (\y r -> imap (\x _ -> stepSeat room x y) r) room
+step' room = imap (\y r -> imap (\x _ -> stepSeat' room x y) r) room
 
-stepSeat room x y = case c of
-  '.' -> '.'
-  'L' | 0 == (occupiedSeats $ adjacentSeats room x y) -> '#'
-  '#' | 4 <= (occupiedSeats $ adjacentSeats room x y) -> 'L'
-  c -> c
+stepSeat room x y =
+  case c of
+       '.' -> '.'
+       'L' | 0 == (occupiedSeats $ adjacentSeats room x y) -> '#'
+       '#' | 4 <= (occupiedSeats $ adjacentSeats room x y) -> 'L'
+       c -> c
+  where (c:_) = seat room x y
+
+stepSeat' room x y =
+  case c of
+       '.' -> '.'
+       'L' | 0 == (occupiedSeats $ visibleSeats room x y) -> '#'
+       '#' | 5 <= (occupiedSeats $ visibleSeats room x y) -> 'L'
+       c -> c
   where (c:_) = seat room x y
 
 occupiedSeats :: String -> Int
@@ -43,6 +53,10 @@ adjacentSeats room x y = concat $ a++b++c
   where a = [seat room (x-1) (y-1),seat room x $ y-1,seat room (x+1) (y-1)]
         b = [seat room (x-1) (y),seat room (x+1) y]
         c = [seat room (x-1) (y+1),seat room x $ y+1,seat room (x+1) (y+1)]
+
+visibleSeats :: Room -> Int -> Int -> String
+visibleSeats room x y =
+  map (seeSeat room x y) [(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
 
 seat :: Room -> Int -> Int -> String
 seat room x y | x < 0 || y < 0 || x >= w || y >= h = ""
@@ -55,6 +69,6 @@ seeSeat room x y slope = seeSeat' w h room (x + (fst slope)) (y + (snd slope)) s
         h = height room
 
 seeSeat' :: Int -> Int -> Room -> Int -> Int -> (Int, Int) -> Char
-seeSeat' w h room x y slope | x >= w || x < 0  || y >= h || y < 0 = '.'
+seeSeat' w h _ x y _ | x >= w || x < 0  || y >= h || y < 0 = '.'
 seeSeat' w h room x y slope = if "." /= s then head s else  seeSeat' w h room (x + (fst slope)) (y + (snd slope)) slope
   where s = seat room x y

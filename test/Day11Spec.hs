@@ -9,9 +9,14 @@ import Data.Vector (Vector, fromList, toList, (!))
 main = hspec spec
 
 room1 = asRoom ["LLL","LLL","LLL"]
+
 room2 = asRoom [ "0.."
                , "..L"
                , "123" ]
+
+room3 = asRoom [ "678"
+               , "5.1"
+               , "432" ]
 
 exampleRoom = asRoom [
   "L.LL.LL.LL",
@@ -85,6 +90,27 @@ lastStep = asRoom [
   "#.LLLLLL.L",
   "#.#L#L#.##"]
 
+step1' = asRoom [ "#.##.##.##"
+                , "#######.##"
+                , "#.#.#..#.."
+                , "####.##.##"
+                , "#.##.##.##"
+                , "#.#####.##"
+                , "..#.#....."
+                , "##########"
+                , "#.######.#"
+                , "#.#####.##" ]
+step2' = asRoom ["#.LL.LL.L#"
+                , "#LLLLLL.LL"
+                , "L.L.L..L.."
+                , "LLLL.LL.LL"
+                , "L.LL.LL.LL"
+                , "L.LLLLL.LL"
+                , "..L.L....."
+                , "LLLLLLLLL#"
+                , "#.LLLLLL.L"
+                , "#.LLLLL.L#" ]
+
 spec =
   describe "Day 11" $ do
     it "finds a seat" $ do
@@ -126,3 +152,10 @@ spec =
       seeSeat room2 0 0 (1,0) `shouldBe` '.'
       seeSeat room2 0 0 (0,1) `shouldBe` '1'
       seeSeat room2 0 0 (1,1) `shouldBe` '3'
+
+    it "finds visible seats" $ do
+      visibleSeats room3 0 0 `shouldBe` "725....."
+      visibleSeats room3 1 1 `shouldBe` "12345678"
+
+    it "steps with visible seats" $ do
+      step' step1' `shouldBe` step2'
