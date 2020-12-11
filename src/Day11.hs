@@ -1,17 +1,28 @@
 module Day11 where
 
+import Data.Vector (Vector, length, fromList, toList, imap, (!))
+
 main = interact $ show . partOne . lines
 
-partOne = occupiedSeats . concat . stepUntilStale
+partOne = countEmptyRoomSeats . stepUntilStale . asRoom
+
+type Room = Vector Row
+type Row = Vector Char
+
+asRoom :: [String] -> Room
+asRoom = fromList . map fromList
+
+width r = Data.Vector.length (r!0)
+height r = Data.Vector.length r
+
+countEmptyRoomSeats room = occupiedSeats s
+  where s = concat $ map toList $ toList room
 
 stepUntilStale room = if room == next then room else stepUntilStale next
   where next = step room
 
-step :: [String] -> [String]
-step room@(a:_) = [[stepSeat room x y | x <- [0..w-1]] | y <- [0..h-1]]
-  where w = length a
-        h = length room
-step _ = error "empty room irrelevant"
+step :: Room -> Room
+step room = imap (\y r -> imap (\x _ -> stepSeat room x y) r) room
 
 stepSeat room x y = case c of
   '.' -> '.'
@@ -21,16 +32,20 @@ stepSeat room x y = case c of
   where (c:_) = seat room x y
 
 occupiedSeats :: String -> Int
-occupiedSeats xs = length $ filter (== '#') xs
+occupiedSeats xs = Prelude.length $ filter (== '#') xs
 
-adjacentSeats :: [String] -> Int -> Int -> String
+adjacentSeats :: Room -> Int -> Int -> String
 adjacentSeats room x y = concat $ a++b++c
   where a = [seat room (x-1) (y-1),seat room x $ y-1,seat room (x+1) (y-1)]
         b = [seat room (x-1) (y),seat room (x+1) y]
         c = [seat room (x-1) (y+1),seat room x $ y+1,seat room (x+1) (y+1)]
 
-seat :: [String] -> Int -> Int -> String
-seat room@(a:_) x y | x < 0 || y < 0 || x >= w || y >= h = ""
-  where w = length a
-        h = length room
-seat room x y = [(room !! y) !! x]
+seat :: Room -> Int -> Int -> String
+seat room x y | x < 0 || y < 0 || x >= w || y >= h = ""
+  where w = width room
+        h = height room
+seat room x y = [(room ! y) ! x]
+
+seeSeat room x y slope = '.'
+  where w = width room
+        h = height room

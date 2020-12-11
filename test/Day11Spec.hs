@@ -4,11 +4,13 @@ import Day11 hiding (main)
 
 import Test.Hspec
 
+import Data.Vector (Vector, fromList, toList, (!))
+
 main = hspec spec
 
-room1 = ["LLL","LLL","LLL"]
+room1 = asRoom ["LLL","LLL","LLL"]
 
-exampleRoom = [
+exampleRoom = asRoom [
   "L.LL.LL.LL",
   "LLLLLLL.LL",
   "L.L.L..L..",
@@ -20,7 +22,7 @@ exampleRoom = [
   "L.LLLLLL.L",
   "L.LLLLL.LL" ]
 
-step1 = [
+step1 = asRoom [
   "#.##.##.##",
   "#######.##",
   "#.#.#..#..",
@@ -32,7 +34,7 @@ step1 = [
   "#.######.#",
   "#.#####.##"]
 
-step2 = [
+step2 = asRoom [
   "#.LL.L#.##",
   "#LLLLLL.L#",
   "L.L.L..L..",
@@ -44,7 +46,7 @@ step2 = [
   "#.LLLLLL.L",
   "#.#LLLL.##"]
 
-step3 = [
+step3 = asRoom [
   "#.##.L#.##",
   "#L###LL.L#",
   "L.#.#..#..",
@@ -56,7 +58,7 @@ step3 = [
   "#.LL###L.L",
   "#.#L###.##"]
 
-step5 = [
+step5 = asRoom [
   "#.#L.L#.##",
   "#LLL#LL.L#",
   "L.#.L..#..",
@@ -68,7 +70,7 @@ step5 = [
   "#.LLLLLL.L",
   "#.#L#L#.##"]
 
-lastStep = [
+lastStep = asRoom [
   "#.#L.L#.##",
   "#LLL#LL.L#",
   "L.#.L..#..",
@@ -83,19 +85,19 @@ lastStep = [
 spec =
   describe "Day 11" $ do
     it "finds a seat" $ do
-      seat ["123","456","789"] 1 1 `shouldBe` "5"
+      seat (asRoom ["123","456","789"]) 1 1 `shouldBe` "5"
 
     it "finds adjacent seat" $ do
-      adjacentSeats ["123","456","789"] 1 1 `shouldBe` "12346789"
-      adjacentSeats ["123","456","789"] 0 0 `shouldBe` "245"
-      adjacentSeats ["123","456","789"] 2 2 `shouldBe` "568"
+      adjacentSeats (asRoom["123","456","789"]) 1 1 `shouldBe` "12346789"
+      adjacentSeats (asRoom["123","456","789"]) 0 0 `shouldBe` "245"
+      adjacentSeats (asRoom["123","456","789"]) 2 2 `shouldBe` "568"
 
     it "steps a seat" $ do
       stepSeat room1 0 0 `shouldBe` '#'
 
     it "generates next step" $ do
-      step ["LLL","LLL","LLL"] `shouldBe` ["###","###","###"]
-      head (step step1) `shouldBe` "#.LL.L#.##"
+      step room1 `shouldBe` asRoom ["###","###","###"]
+      (step step1) ! 0  `shouldBe` fromList "#.LL.L#.##"
 
     it "check step 2 computation" $ do
       adjacentSeats step1 0 0 `shouldBe` ".##"
@@ -111,3 +113,12 @@ spec =
 
     it "steps until stale" $ do
       stepUntilStale exampleRoom `shouldBe` lastStep
+
+    it "counts occupied seats in a room" $ do
+      countEmptyRoomSeats lastStep `shouldBe` 37
+
+    it "builds a vector" $ do
+      let r = fromList [fromList "LLL", fromList "LLL"] :: Vector (Vector Char)
+      let rr = room1
+      r ! 0 ! 0 `shouldBe` 'L'
+      rr ! 0 ! 0 `shouldBe` 'L'
