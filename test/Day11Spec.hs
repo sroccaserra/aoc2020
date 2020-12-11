@@ -9,6 +9,9 @@ import Data.Vector (Vector, fromList, toList, (!))
 main = hspec spec
 
 room1 = asRoom ["LLL","LLL","LLL"]
+room2 = asRoom [ "0.."
+               , "..L"
+               , "123" ]
 
 exampleRoom = asRoom [
   "L.LL.LL.LL",
@@ -117,8 +120,9 @@ spec =
     it "counts occupied seats in a room" $ do
       countEmptyRoomSeats lastStep `shouldBe` 37
 
-    it "builds a vector" $ do
-      let r = fromList [fromList "LLL", fromList "LLL"] :: Vector (Vector Char)
-      let rr = room1
-      r ! 0 ! 0 `shouldBe` 'L'
-      rr ! 0 ! 0 `shouldBe` 'L'
+    it "sees a seat following a slope" $ do
+      seeSeat room1 0 0 (1,0) `shouldBe` 'L'
+
+      seeSeat room2 0 0 (1,0) `shouldBe` '.'
+      seeSeat room2 0 0 (0,1) `shouldBe` '1'
+      seeSeat room2 0 0 (1,1) `shouldBe` '3'

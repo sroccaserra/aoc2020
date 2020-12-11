@@ -2,9 +2,11 @@ module Day11 where
 
 import Data.Vector (Vector, length, fromList, toList, imap, (!))
 
-main = interact $ show . partOne . lines
+main = interact $ show . partTwo . lines
 
 partOne = countEmptyRoomSeats . stepUntilStale . asRoom
+
+partTwo = countEmptyRoomSeats . stepUntilStale' . asRoom
 
 type Room = Vector Row
 type Row = Vector Char
@@ -20,6 +22,8 @@ countEmptyRoomSeats room = occupiedSeats s
 
 stepUntilStale room = if room == next then room else stepUntilStale next
   where next = step room
+
+stepUntilStale' = stepUntilStale
 
 step :: Room -> Room
 step room = imap (\y r -> imap (\x _ -> stepSeat room x y) r) room
@@ -46,6 +50,11 @@ seat room x y | x < 0 || y < 0 || x >= w || y >= h = ""
         h = height room
 seat room x y = [(room ! y) ! x]
 
-seeSeat room x y slope = '.'
+seeSeat room x y slope = seeSeat' w h room (x + (fst slope)) (y + (snd slope)) slope
   where w = width room
         h = height room
+
+seeSeat' :: Int -> Int -> Room -> Int -> Int -> (Int, Int) -> Char
+seeSeat' w h room x y slope | x >= w || x < 0  || y >= h || y < 0 = '.'
+seeSeat' w h room x y slope = if "." /= s then head s else  seeSeat' w h room (x + (fst slope)) (y + (snd slope)) slope
+  where s = seat room x y
