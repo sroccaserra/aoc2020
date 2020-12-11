@@ -141,7 +141,7 @@ spec =
       step lastStep `shouldBe` lastStep
 
     it "steps until stale" $ do
-      stepUntilStale exampleRoom `shouldBe` lastStep
+      stepUntilStable exampleRoom `shouldBe` lastStep
 
     it "counts occupied seats in a room" $ do
       countEmptyRoomSeats lastStep `shouldBe` 37

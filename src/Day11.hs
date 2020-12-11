@@ -5,9 +5,9 @@ import Data.Vector (Vector, length, fromList, toList, imap, (!))
 
 main = interact $ show . partTwo . lines
 
-partOne = countEmptyRoomSeats . stepUntilStale . asRoom
+partOne = countEmptyRoomSeats . stepUntilStable . asRoom
 
-partTwo = countEmptyRoomSeats . stepUntilStale' . asRoom
+partTwo = countEmptyRoomSeats . stepUntilStable' . asRoom
 
 type Room = Vector Row
 type Row = Vector Char
@@ -23,10 +23,10 @@ directions = [(x,y) | x <- [-1..1], y <- [-1..1], (x,y) /= (0,0)]
 countEmptyRoomSeats room = occupiedSeats s
   where s = concat $ map toList $ toList room
 
-stepUntilStale room = if room == next then room else stepUntilStale next
+stepUntilStable room = if room == next then room else stepUntilStable next
   where next = step room
 
-stepUntilStale' room = if room == next then room else stepUntilStale' next
+stepUntilStable' room = if room == next then room else stepUntilStable' next
   where next = step' room
 
 step room = imap (\y r -> imap (\x _ -> stepSeat room x y) r) room
@@ -54,7 +54,7 @@ occupiedSeats xs = Prelude.length $ filter (== '#') xs
 adjacentSeats :: Room -> Int -> Int -> String
 adjacentSeats room x y = catMaybes $ a++b++c
   where a = [seat room (x-1) (y-1),seat room x $ y-1,seat room (x+1) (y-1)]
-        b = [seat room (x-1) (y),seat room (x+1) y]
+        b = [seat room (x-1) y,seat room (x+1) y]
         c = [seat room (x-1) (y+1),seat room x $ y+1,seat room (x+1) (y+1)]
 
 visibleSeats :: Room -> Int -> Int -> String
