@@ -52,7 +52,7 @@ $ stack ghci src/DayXX.hs
 ## Learnings
 
 - Reading from `stdin` allows to input lines manually (or paste short examples from the puzzle text) and end by Ctrl+D
-- `Data.Complex` is handy for 2D operations
+- `Data.Complex` is handy for 2D operations (regular addition translates, `(* (0+:1))` rotates 90 °, `(* -(0:+1))` rotates -90 °)
 - `Data.Maybe.catMaybes` turns a list of `Maybe a` into a list of `a`
 - If I declare both a `main = hspec spec` and a `spec` functions in a test file, I can run them either individually or all.
 - For Int indexed values, [Vector][ve] seems more useful than [Array][ar]
