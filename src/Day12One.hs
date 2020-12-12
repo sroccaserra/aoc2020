@@ -7,24 +7,16 @@ main = interact $ show . partOne . (map parseLine) . lines
 parseLine (d:x) = (d,read x ::Int)
 parseLine s = error $ "wrong input: " ++ s
 
-partOne = manhattanDistance . applyInstructions ('E',0,0)
--- partOne = applyInstructions ('E',0,0)
+partOne = manhattanDistance . foldl moveShip ('E', 0,0)
+  where manhattanDistance (_, x, y) = abs x + abs y
 
-applyInstructions s (x:[]) = moveShip x s
-applyInstructions s (x:rest) = applyInstructions (moveShip x s) rest
-applyInstructions _ _ = error "wrong instruction"
-
-manhattanDistance (_, x, y) = abs x + abs y
-
-type Ship = (Char,Int,Int)
-
-moveShip ('N',n) (d,x,y) = (d, x, y+n)
-moveShip ('S',n) (d,x,y) = (d, x, y-n)
-moveShip ('E',n) (d,x,y) = (d, x+n, y)
-moveShip ('W',n) (d,x,y) = (d, x-n, y)
-moveShip ('F',n) s = advanceShip n s
-moveShip ('R',a) s = turnShipRight a s
-moveShip ('L',a) s = turnShipLeft a s
+moveShip (d,x,y) ('N',n) = (d, x, y+n)
+moveShip (d,x,y) ('S',n) = (d, x, y-n)
+moveShip (d,x,y) ('E',n) = (d, x+n, y)
+moveShip (d,x,y) ('W',n) = (d, x-n, y)
+moveShip s ('F',n) = advanceShip n s
+moveShip s ('R',a) = turnShipRight a s
+moveShip s ('L',a) = turnShipLeft a s
 moveShip _ _ = error "wrong instruction"
 
 advanceShip n (d@'N',x,y) = (d, x, y+n)
