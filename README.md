@@ -51,6 +51,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- I should read and learn [this theorem][cr], it was apparently useful for day 13
 - Reading from `stdin` allows to input lines manually (or paste short examples from the puzzle text) and end by Ctrl+D
 - `Data.Complex` is handy for 2D operations (regular addition translates, `(* (0+:1))` rotates 90 °, `(* -(0:+1))` rotates -90 °)
 - `Data.Maybe.catMaybes` turns a list of `Maybe a` into a list of `a`
@@ -87,6 +88,7 @@ main = do
 [ar]: https://hackage.haskell.org/package/array
 [br]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:break
 [cc]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:concat
+[cr]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
 [cy]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:cycle
 [dw]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:dropWhile
 [fe]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:fromEnum
