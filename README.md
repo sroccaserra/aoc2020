@@ -40,7 +40,7 @@ $ stack test
 ## Building
 
 ```
-$ stack ghc -- -main-is DayXX src/DayXX.hs
+$ stack ghc -- -O2 -main-is DayXX src/DayXX.hs
 ```
 
 ## Repl
