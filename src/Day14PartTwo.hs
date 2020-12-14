@@ -1,4 +1,4 @@
-module Day14 where
+module Day14PartTwo where
 
 import Data.Bits
 import Data.Char
@@ -8,10 +8,10 @@ import Data.Int
 
 main = interact $ show . partOne . parse
 
-parse = map cutcut . chunk
-  where chunk = map lines . tail . splitOn "mask = "
-        cutcut (x:xs) = (parseMasks x, parseInstructions xs)
-        cutcut _ = error "wrong input"
+parse = map parseMaskAndInstructions . groupByMask
+  where groupByMask = map lines . tail . splitOn "mask = "
+        parseMaskAndInstructions (x:xs) = (parseMasks x, parseInstructions xs)
+        parseMaskAndInstructions _ = error "wrong input"
 
 parseMasks :: String -> MaskPair
 parseMasks s = (orMask s, andMask s)
@@ -30,16 +30,10 @@ parseInstructions = map (toInstruction . words . map clean)
         toInstruction (x:y:_) = (read x, read y)
         toInstruction _ = error "wrong instruction"
 
-partOne = sum . M.elems . foldl applyMaskWithInstructions initMemory
+partOne = sum . M.elems . foldl applyMaskWithInstruction initMemory
 
-type MaskWithInstructions = (MaskPair, [MemInstruction])
-type MaskPair = (Int64, Int64)
-type MemInstruction = (Int64, Int64)
-
-type Memory = M.Map Int64 Int64
-
-applyMaskWithInstructions :: Memory -> MaskWithInstructions -> Memory
-applyMaskWithInstructions m ((o,a), xs) = updateMemValues m (masked o a xs)
+applyMaskWithInstruction :: Memory ->  MaskWithInstructions -> Memory
+applyMaskWithInstruction m ((o,a), xs) = updateMemValues m (masked o a xs)
   where masked :: Int64 -> Int64 -> [MemInstruction] -> [MemInstruction]
         masked om am xs = map (\(a,v) -> (a, (om .|. v) .&. am)) xs
 
@@ -51,5 +45,18 @@ updateMemValues m xs = foldl updateMemValue m xs
 initMemory :: Memory
 initMemory = M.empty
 
+type MaskWithInstructions = (MaskPair, [MemInstruction])
+type MaskPair = (Int64, Int64)
+type MemInstruction = (Int64, Int64)
+
+type Memory = M.Map Int64 Int64
+
 toDec :: [Int64] -> Int64
 toDec = foldl1 $ (+) . (*2)
+
+toBin :: Int64 -> [Int64]
+toBin 0 = [0]
+toBin n = reverse (toBin' n)
+
+toBin' 0 = []
+toBin' n = let (q,r) = n `divMod` 2 in r : toBin' q
