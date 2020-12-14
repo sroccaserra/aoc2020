@@ -51,9 +51,18 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- To poke a batch of zeros and ones in an int, use a string to create an int mask for zeros, an int mask for ones, and apply `.&.` to poke zeros and `.|.` to poke ones (uses some tips below):
+
+```haskell
+> zeroMask = foldl1 ((+) . (*2)) $ map (fromEnum . (/='0')) "-----01-1"
+> oneMask = foldl1 ((+) . (*2)) $ map (fromEnum . (=='1')) "-----01-1"
+> (31 .&. zeroMask) .|. oneMask
+23
+```
+
 - [sequence][se] can generate combinations:
 
-```
+```haskell
 > sequence [['0','1'],['a'],['b'],['0','1']]
 ["0ab0","0ab1","1ab0","1ab1"]
 ```
