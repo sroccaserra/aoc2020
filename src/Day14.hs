@@ -13,6 +13,7 @@ parse = map cutcut . chunk
         cutcut (x:xs) = (parseMasks x, parseInstructions xs)
         cutcut _ = error "wrong input"
 
+parseMasks :: String -> MaskPair
 parseMasks s = (orMask s, andMask s)
   where orMask = toDec . toIntList . map (xTo '0')
         andMask = toDec . toIntList . map (xTo '1')
@@ -21,31 +22,34 @@ parseMasks s = (orMask s, andMask s)
         xTo r 'X' = r
         xTo _ c = c
 
-parseInstructions :: [String] -> [(Int64, Int64)]
+parseInstructions :: [String] -> [MemInstruction]
 parseInstructions = map (toInstruction . words . map clean)
   where clean c | isDigit c = c
         clean _ = ' '
-        toInstruction :: [String] -> (Int64, Int64)
+        toInstruction :: [String] -> MemInstruction
         toInstruction (x:y:_) = (read x, read y)
         toInstruction _ = error "wrong instruction"
 
-partOne = sum . M.elems . foldl applyInstruction initMemory
+partOne = sum . M.elems . foldl applyMaskWithInstructions initMemory
 
-applyInstruction :: Memory ->  InstructionList -> Memory
-applyInstruction m ((o,a), xs) = updateMemValues m (masked o a xs)
-  where masked :: Int64 -> Int64 -> [(Int64, Int64)] -> [(Int64, Int64)]
+type MaskWithInstructions = (MaskPair, [MemInstruction])
+type MaskPair = (Int64, Int64)
+type MemInstruction = (Int64, Int64)
+
+type Memory = M.Map Int64 Int64
+
+applyMaskWithInstructions :: Memory -> MaskWithInstructions -> Memory
+applyMaskWithInstructions m ((o,a), xs) = updateMemValues m (masked o a xs)
+  where masked :: Int64 -> Int64 -> [MemInstruction] -> [MemInstruction]
         masked om am xs = map (\(a,v) -> (a, (om .|. v) .&. am)) xs
 
-updateMemValues :: Memory -> [(Int64, Int64)] -> Memory
+updateMemValues :: Memory -> [MemInstruction] -> Memory
 updateMemValues m xs = foldl updateMemValue m xs
-  where updateMemValue :: M.Map Int64 Int64 -> (Int64, Int64) -> M.Map Int64 Int64
-        updateMemValue m (a, v) = M.insert a v m 
+  where updateMemValue :: M.Map Int64 Int64 -> MemInstruction -> M.Map Int64 Int64
+        updateMemValue m (a, v) = M.insert a v m
 
 initMemory :: Memory
 initMemory = M.empty
-
-type InstructionList = ((Int64,Int64), [(Int64,Int64)])
-type Memory = M.Map Int64 Int64
 
 toDec :: [Int64] -> Int64
 toDec = foldl1 $ (+) . (*2)
