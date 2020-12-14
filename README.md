@@ -51,6 +51,13 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- [sequence][se] can generate combinations:
+
+```
+> sequence [['0','1'],['a'],['b'],['0','1']]
+["0ab0","0ab1","1ab0","1ab1"]
+```
+
 - I should read and learn [this theorem][cr], it was apparently useful for day 13
 - Reading from `stdin` allows to input lines manually (or paste short examples from the puzzle text) and end by Ctrl+D
 - `Data.Complex` is handy for 2D operations (regular addition translates, `(* (0+:1))` rotates 90 °, `(* -(0:+1))` rotates -90 °)
@@ -102,6 +109,7 @@ main = do
 [re]: https://hackage.haskell.org/package/regex-tdfa-1.3.1.0/docs/Text-Regex-TDFA.html
 [rp]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Text-ParserCombinators-ReadP.html
 [rrc]: https://github.com/sroccaserra/aoc2020/commit/f38935c
+[se]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:sequence
 [sp]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:span
 [tw]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:takeWhile
 [ve]: https://hackage.haskell.org/package/vector-0.12.1.2
