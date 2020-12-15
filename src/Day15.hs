@@ -20,8 +20,8 @@ solve n ns = p
 type State = (M.Map Int Int, Int, Int)
 
 initMap :: [Int] -> M.Map Int Int
-initMap ns = foldl' acc M.empty [2..length ns]
-  where acc m i = let p = ns !! (i-2) in M.insert p (i-1) m
+initMap ns = foldl' acc M.empty [1..pred $ length ns]
+  where acc m i = M.insert (ns !! pred i) i m
 
 step :: State -> Int -> State
 step (m,p,i) _ = (M.insert p i m, n, (succ i))
