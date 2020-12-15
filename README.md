@@ -51,6 +51,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- `Data.IntMap.Strict` is useful to represent data indexed by `Int`s
 - If this program `main = print (foldl (+) 0 [1..1000000])` is compiled in GHC without "-O" flag, it uses a lot of heap and stack (see <https://wiki.haskell.org/Performance/Strictness>)
 - Prefer using `foldl` to explicit recursion?
 - After a new line with wrong indentation, ` is better that deleting spaces
