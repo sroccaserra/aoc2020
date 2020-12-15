@@ -14,14 +14,16 @@ partOne = solve 2020
 partTwo = solve 30000000
 
 solve n ns = p
-  where m = initMap ns
-        (_,p,_) = foldl' step (m, ns !! (pred $ length ns), length ns) [1..n-(length ns)]
+  where (_,p,_) = foldl' step (initState ns) [1..n - length ns]
 
 type State = (M.Map Int Int, Int, Int)
 
-initMap :: [Int] -> M.Map Int Int
-initMap ns = foldl' acc M.empty [1..pred $ length ns]
-  where acc m i = M.insert (ns !! pred i) i m
+initState :: [Int] -> State
+initState ns = (m, p, i)
+  where m = foldl' acc M.empty [1..pred $ length ns]
+        acc a i = M.insert (ns !! pred i) i a
+        i = length ns
+        p = ns !! (pred $ length ns)
 
 step :: State -> Int -> State
 step (m,p,i) _ = (M.insert p i m, n, (succ i))
