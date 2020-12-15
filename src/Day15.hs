@@ -9,17 +9,14 @@ main = interact $ show . partTwo . parseLine
 parseLine :: String -> [Int]
 parseLine = map read . splitOn ","
 
-partOne ns = p
-  where n = 2020
-        m = initMap ns
-        (_,p,_) = foldl' step (m, ns !! (pred $ length ns), length ns) [1..n- (length ns)]
+partOne = solve 2020
 
-partTwo ns = p
-  where n = 30000000
-        m = initMap ns
+partTwo = solve 30000000
+
+solve n ns = p
+  where m = initMap ns
         (_,p,_) = foldl' step (m, ns !! (pred $ length ns), length ns) [1..n-(length ns)]
 
--- m p i
 type State = (M.Map Int Int, Int, Int)
 
 initMap :: [Int] -> M.Map Int Int
