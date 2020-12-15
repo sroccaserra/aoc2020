@@ -1,18 +1,22 @@
 module Day15 where
 
--- import Debug.Trace
 import Data.List
 import Data.List.Split
 import qualified Data.Map as M
 import qualified Data.Vector as V
 
-main = interact $ show . partOne . parseLine
+main = interact $ show . partTwo . parseLine
 
 parseLine :: String -> [Int]
 parseLine = map read . splitOn ","
 
 partOne ns = (p, i, k)
   where n = 2020
+        (v,m,k) = initMap ns n
+        (_,p,i,_) = foldl' step (m, v V.! (pred $ V.length v), V.length v, k) [1..n- (V.length v)]
+
+partTwo ns = (p, i, k)
+  where n = 30000000
         (v,m,k) = initMap ns n
         (_,p,i,_) = foldl' step (m, v V.! (pred $ V.length v), V.length v, k) [1..n- (V.length v)]
 
@@ -28,12 +32,7 @@ initMap ns@(h:_) k = foldl acc (V.fromList [h], M.empty, k) [2..length ns]
 initMap _ _ = error "wrong input"
 
 step :: State -> Int -> State
-step st@(_,_,i,k) _ | i == k = st
 step (m,p,i,k) _ = (M.insert p i m, n, (succ i), k)
   where n = case M.lookup p m of
                  Nothing -> 0
                  Just j -> i-j
-
--- V.length v -> i
--- v V.! (i-1) -> p
---
