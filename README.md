@@ -51,6 +51,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- Prefer using `foldl` to explicit recursion?
 - After a new line with wrong indentation, ` is better that deleting spaces
 - To change the last word of a line, `C` works, `de` does not
 - To poke a batch of zeros and ones in an int, use a string to create an int mask for zeros, an int mask for ones, and apply `.&.` to poke zeros and `.|.` to poke ones (uses some tips below):
