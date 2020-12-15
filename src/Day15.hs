@@ -27,6 +27,4 @@ initState ns = (m, p, i)
 
 step :: State -> Int -> State
 step (m,p,i) _ = (M.insert p i m, n, succ i)
-  where n = case M.lookup p m of
-                 Nothing -> 0
-                 Just j -> i-j
+  where n = maybe 0 (\j -> i-j) $ M.lookup p m
