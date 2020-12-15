@@ -13,18 +13,15 @@ partOne = solve 2020
 
 partTwo = solve 30000000
 
-solve n ns = p
-  where (_,p,_) = foldl' step (initState ns) [1..n - length ns]
+solve n ns = p where (_,p,_) = foldl' step (initState ns) [1..n - length ns]
 
 type State = (M.IntMap Int, Int, Int)
 
 initState :: [Int] -> State
-initState ns = (m, p, i)
+initState ns = (m, last ns, length ns)
   where m = foldl' f M.empty [0..length ns - 2]
         f a e = M.insert (ns !! e) (e+1) a
-        p = last ns
-        i = length ns
 
 step :: State -> Int -> State
-step (m,p,i) _ = (M.insert p i m, n, succ i)
-  where n = maybe 0 (\j -> i-j) $ M.lookup p m
+step (m,p,i) _ = (M.insert p i m, p', succ i)
+  where p' = maybe 0 (\j -> i-j) $ M.lookup p m
