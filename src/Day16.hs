@@ -17,4 +17,11 @@ parseRule s = (label , map read $ words $ map clean xs ::[Int])
 parseTicket :: String -> [Int]
 parseTicket = map read . splitOn ","
 
-partOne (rules,tickets) = rules
+partOne (rules,tickets) = sum $ concat $ map (checkTicket rules) tickets
+
+checkTicket rs xs = filter (not . matchesAnyRule rs) xs
+
+matchesAnyRule rs x = any (matchesRule x) rs
+
+matchesRule x (_,[a1,b1,a2,b2]) = (a1 <= x && x <= b1) || (a2 <= x && x <= b2)
+matchesRule _ _ = error "wrong input"
