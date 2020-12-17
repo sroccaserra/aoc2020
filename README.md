@@ -51,6 +51,14 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- `Control.Applicative` can help transpose lists:
+
+```
+transpose :: [[a]] -> [[a]]
+transpose = getZipList . traverse ZipList
+```
+
+- Understanding folds by examples: <https://wiki.haskell.org/Foldr_Foldl_Foldl%27>
 - `Data.IntMap.Strict` is useful to represent data indexed by `Int`s
 - If this program `main = print (foldl (+) 0 [1..1000000])` is compiled in GHC without "-O" flag, it uses a lot of heap and stack (see <https://wiki.haskell.org/Performance/Strictness>)
 - Prefer using `foldl` to explicit recursion?
