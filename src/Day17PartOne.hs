@@ -1,4 +1,4 @@
-module Day17 where
+module Day17PartOne where
 
 import Data.List
 import qualified Data.Map.Strict as M
