@@ -51,6 +51,18 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- Evaluate sub expressions in Vim (this evaluates expressions one at a time disregarding priority, or puts everything on one line then evaluate exprs one by one inverting `*` and `+` precedence, see [day 18][d18]):
+
+```
+:%s/\d\+ [+*] \d\+\|(\d\+)/\=eval(submatch(0))/
+```
+or
+```
+:%s/\(.*\)\n/ + (\1)/
+:%s/\d\+ + \d\+\|([^+()]*)\|^[^+]*$/\=eval(submatch(0))/
+5000@:
+```
+
 - In Smalltalk, `Compiler`'s `#evaluate:` method can evaluate strings
 - `Control.Applicative` can help transpose lists:
 
@@ -120,6 +132,7 @@ main = do
 [cc]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:concat
 [cr]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
 [cy]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:cycle
+[d18]: https://adventofcode.com/2020/day/18
 [dw]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:dropWhile
 [fe]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:fromEnum
 [fm]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Maybe.html#v:fromMaybe
