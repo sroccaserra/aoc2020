@@ -51,6 +51,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- In Smalltalk, `Compiler`'s `#evaluate:` method can evaluate strings
 - `Control.Applicative` can help transpose lists:
 
 ```
