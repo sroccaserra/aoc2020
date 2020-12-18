@@ -51,6 +51,8 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- `ReadP` parsers can be used with the `Monad` interface with `>>=` or `do`, or with the `Functor` interface with `<$>`, `<*>`, `<*`, `*>` and `<|>`.
+- [chainl][cl] can apply operators while parsing an expression, see <https://github.com/Morendil/AdventOfCode2020/blob/main/Day18.hs>
 - Evaluate sub expressions in Vim (this evaluates expressions one at a time disregarding priority, or puts everything on one line then evaluate exprs one by one inverting `*` and `+` precedence, see [day 18][d18]):
 
 ```
@@ -130,6 +132,7 @@ main = do
 [ar]: https://hackage.haskell.org/package/array
 [br]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:break
 [cc]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:concat
+[cl]: https://hackage.haskell.org/package/base-4.14.1.0/docs/Text-ParserCombinators-ReadP.html#v:chainl
 [cr]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
 [cy]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:cycle
 [d18]: https://adventofcode.com/2020/day/18
