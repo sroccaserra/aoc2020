@@ -53,7 +53,7 @@ $ stack ghci src/DayXX.hs
 
 - In Python, `re.match()` checks for a match only at the beginning of the string, while `re.search()` checks for a match anywhere in the string.
 - In Python, `sys.flags.interactive` can prevent script to execute in REPL: `if __name__ == "__main__" and not sys.flags.interactive:`
-- In Python, `fileinput` can read line from `$1` if any, or `stdin`: `lines = [l.strip() for l in fileinput.input()]`
+- In Python, `fileinput` can read lines from `$1` file if any, or from `stdin`: `lines = [l.strip() for l in fileinput.input()]`
 - `ReadP` parsers can be used with the `Monad` interface with `>>=` or `do`, or with the `Functor` interface with `<$>`, `<*>`, `<*`, `*>` and `<|>`.
 - [chainl][cl] can apply operators while parsing an expression, see <https://github.com/Morendil/AdventOfCode2020/blob/main/Day18.hs>
 - Evaluate sub expressions in Vim (this evaluates expressions one at a time disregarding priority, or puts everything on one line then evaluate exprs one by one inverting `*` and `+` precedence, see [day 18][d18]):
@@ -80,8 +80,8 @@ transpose = getZipList . traverse ZipList
 - `Data.IntMap.Strict` is useful to represent data indexed by `Int`s
 - If this program `main = print (foldl (+) 0 [1..1000000])` is compiled in GHC without "-O" flag, it uses a lot of heap and stack (see <https://wiki.haskell.org/Performance/Strictness>)
 - Prefer using `foldl` to explicit recursion?
-- After a new line with wrong indentation, ` is better that deleting spaces
-- To change the last word of a line, `C` works, `de` does not
+- In Vim, after a new line with wrong indentation, `<Esc>i` or `<CR>` are better that deleting spaces
+- In Vim, to change the last word of a line, `C` works, `de` does not
 - To poke a batch of zeros and ones in an int, use a string to create an int mask for zeros, an int mask for ones, and apply `.&.` to poke zeros and `.|.` to poke ones (uses some tips below):
 
 ```haskell
