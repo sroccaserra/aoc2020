@@ -4,7 +4,7 @@ import re
 import sys
 
 def part_one(rules,values):
-    regex = reduce_rules(rules)
+    regex = reduce_rules(rules)+'$'
     matches = list(filter(lambda v: re.match(regex, v),values))
     return len(matches)
 
@@ -28,8 +28,7 @@ def solve(v, solved):
     return reduce(lambda s, k: replace_rule(k, solved[k], s), solved, v)
 
 def replace_rule(k, v, s):
-    replacement = v if [] == re.match(r'\|',v) else '({0})'.format(v)
-    return re.sub(r'\b{0}\b'.format(k), replacement, s)
+    return re.sub(r'\b{0}\b'.format(k), '('+v+')', s)
 
 def is_solved(v):
     return [] == re.findall(r'[0-9]', v)
@@ -43,7 +42,7 @@ def parse_rules(lines):
     return {a[0]:a[1] for a in lists}
 
 def parse_values(lines):
-    return list(filter(lambda l: (not ':' in l) and '' != l and 24 == len(l), lines))
+    return list(filter(lambda l: (not ':' in l) and '' != l, lines))
 
 if __name__ == '__main__' and not sys.flags.interactive:
     lines = [l.strip() for l in fileinput.input()]
