@@ -51,6 +51,35 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+### Smalltalk
+
+- `Compiler`'s `#evaluate:` method can evaluate strings
+
+### Python
+
+- `re.match()` checks for a match only at the beginning of the string, while `re.search()` checks for a match anywhere in the string.
+- `sys.flags.interactive` can prevent script to execute in REPL: `if __name__ == "__main__" and not sys.flags.interactive:`
+- `fileinput` can read lines from `$1` file if any, or from `stdin`: `lines = [l.strip() for l in fileinput.input()]`
+
+### Vim
+
+- Evaluate sub expressions (this evaluates expressions one at a time disregarding priority, or puts everything on one line then evaluate exprs one by one inverting `*` and `+` precedence, see [day 18][d18]):
+
+```
+:%s/\d\+ [+*] \d\+\|(\d\+)/\=eval(submatch(0))/
+```
+or
+```
+:%s/\(.*\)\n/ + (\1)/
+:%s/\d\+ + \d\+\|([^+()]*)\|^[^+]*$/\=eval(submatch(0))/
+5000@:
+```
+
+- After a new line with wrong indentation, `<Esc>i` or `<CR>` are better that deleting spaces
+- To change the last word of a line, `C` works, `de` does not
+
+### Haskell
+
 - Combine parsers with `<$>` and `<*>`: `readP_to_S ((\x y -> x:y:[]) <$> get <*> get) "abc"` gives `[("ab", "c")]`. Other example:
 
 ```haskell
@@ -74,24 +103,8 @@ value = read <$> munch1 isDigit
 test = readP_to_S p
 ```
 
-- In Python, `re.match()` checks for a match only at the beginning of the string, while `re.search()` checks for a match anywhere in the string.
-- In Python, `sys.flags.interactive` can prevent script to execute in REPL: `if __name__ == "__main__" and not sys.flags.interactive:`
-- In Python, `fileinput` can read lines from `$1` file if any, or from `stdin`: `lines = [l.strip() for l in fileinput.input()]`
 - `ReadP` parsers can be used with the `Monad` interface with `>>=` or `do`, or with the `Applicative` interface with `<$>`, `<*>`, `<*`, `*>` and `<|>`.
 - [chainl][cl] can apply operators while parsing an expression, see <https://github.com/Morendil/AdventOfCode2020/blob/main/Day18.hs>
-- Evaluate sub expressions in Vim (this evaluates expressions one at a time disregarding priority, or puts everything on one line then evaluate exprs one by one inverting `*` and `+` precedence, see [day 18][d18]):
-
-```
-:%s/\d\+ [+*] \d\+\|(\d\+)/\=eval(submatch(0))/
-```
-or
-```
-:%s/\(.*\)\n/ + (\1)/
-:%s/\d\+ + \d\+\|([^+()]*)\|^[^+]*$/\=eval(submatch(0))/
-5000@:
-```
-
-- In Smalltalk, `Compiler`'s `#evaluate:` method can evaluate strings
 - `Control.Applicative` can help transpose lists:
 
 ```haskell
@@ -103,8 +116,6 @@ transpose = getZipList . traverse ZipList
 - `Data.IntMap.Strict` is useful to represent data indexed by `Int`s
 - If this program `main = print (foldl (+) 0 [1..1000000])` is compiled in GHC without "-O" flag, it uses a lot of heap and stack (see <https://wiki.haskell.org/Performance/Strictness>)
 - Prefer using `foldl` to explicit recursion?
-- In Vim, after a new line with wrong indentation, `<Esc>i` or `<CR>` are better that deleting spaces
-- In Vim, to change the last word of a line, `C` works, `de` does not
 - To poke a batch of zeros and ones in an int, use a string to create an int mask for zeros, an int mask for ones, and apply `.&.` to poke zeros and `.|.` to poke ones (uses some tips below):
 
 ```haskell
