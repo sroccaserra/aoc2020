@@ -51,6 +51,7 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- In Python, `re.match()` checks for a match only at the beginning of the string, while `re.search()` checks for a match anywhere in the string.
 - In Python, `sys.flags.interactive` can prevent script to execute in REPL: `if __name__ == "__main__" and not sys.flags.interactive:`
 - In Python, `fileinput` can read line from `$1` if any, or `stdin`: `lines = [l.strip() for l in fileinput.input()]`
 - `ReadP` parsers can be used with the `Monad` interface with `>>=` or `do`, or with the `Functor` interface with `<$>`, `<*>`, `<*`, `*>` and `<|>`.

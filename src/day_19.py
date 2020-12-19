@@ -31,7 +31,7 @@ def replace_rule(k, v, s):
     return re.sub(r'\b{0}\b'.format(k), '('+v+')', s)
 
 def is_solved(v):
-    return [] == re.findall(r'[0-9]', v)
+    return re.search(r'[0-9]', v) is None
 
 def parse(lines):
     return parse_rules(lines),parse_values(lines)
