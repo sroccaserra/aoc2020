@@ -30,21 +30,20 @@ def find_unsolved(d):
 def solve(v, solved):
     return reduce(lambda s, k: replace_rule(k, solved[k], s), solved, v)
 
+def step(rules):
+    solved = find_solved(rules)
+    unsolved = find_unsolved(rules)
+    return {k:solve(v,solved) for k,v in unsolved.items()}
+
 def reduce_rules(rules):
     while len(rules) > 1:
         rules = step(rules)
     return rules['0'].replace(' ','')
 
 def part_one(rules,values):
-    rule = reduce_rules(rules)
-    matches = list(filter(lambda v: [] != re.findall(rule, v),values))
-    print(matches)
+    regex = reduce_rules(rules)
+    matches = list(filter(lambda v: re.match(regex, v),values))
     return len(matches)
-
-def step(rules):
-    solved = find_solved(rules)
-    unsolved = find_unsolved(rules)
-    return {k:solve(v,solved) for k,v in unsolved.items()}
 
 if __name__ == "__main__" and not sys.flags.interactive:
     lines = [l.strip() for l in fileinput.input()]

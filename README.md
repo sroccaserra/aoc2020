@@ -51,6 +51,8 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- In Python, `sys.flags.interactive` can prevent script to execute in REPL: `if __name__ == "__main__" and not sys.flags.interactive:`
+- In Python, `fileinput` can read line from `$1` if any, or `stdin`: `lines = [l.strip() for l in fileinput.input()]`
 - `ReadP` parsers can be used with the `Monad` interface with `>>=` or `do`, or with the `Functor` interface with `<$>`, `<*>`, `<*`, `*>` and `<|>`.
 - [chainl][cl] can apply operators while parsing an expression, see <https://github.com/Morendil/AdventOfCode2020/blob/main/Day18.hs>
 - Evaluate sub expressions in Vim (this evaluates expressions one at a time disregarding priority, or puts everything on one line then evaluate exprs one by one inverting `*` and `+` precedence, see [day 18][d18]):
