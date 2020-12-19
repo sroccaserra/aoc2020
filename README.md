@@ -51,10 +51,33 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+- Combine parsers with `<$>` and `<*>`: `readP_to_S ((\x y -> x:y:[]) <$> get <*> get) "abc"` gives `[("ab", "c")]`. Other example:
+
+```haskell
+import Control.Applicative
+import Text.ParserCombinators.ReadP
+import Data.Char
+
+data KeyValue = KeyValue String Int
+              deriving (Show)
+
+p :: ReadP KeyValue
+p = KeyValue <$> key <* sep <*> value
+
+key = munch1 isAlpha
+
+sep = char ':'
+
+value :: ReadP Int
+value = read <$> munch1 isDigit
+
+test = readP_to_S p
+```
+
 - In Python, `re.match()` checks for a match only at the beginning of the string, while `re.search()` checks for a match anywhere in the string.
 - In Python, `sys.flags.interactive` can prevent script to execute in REPL: `if __name__ == "__main__" and not sys.flags.interactive:`
 - In Python, `fileinput` can read lines from `$1` file if any, or from `stdin`: `lines = [l.strip() for l in fileinput.input()]`
-- `ReadP` parsers can be used with the `Monad` interface with `>>=` or `do`, or with the `Functor` interface with `<$>`, `<*>`, `<*`, `*>` and `<|>`.
+- `ReadP` parsers can be used with the `Monad` interface with `>>=` or `do`, or with the `Applicative` interface with `<$>`, `<*>`, `<*`, `*>` and `<|>`.
 - [chainl][cl] can apply operators while parsing an expression, see <https://github.com/Morendil/AdventOfCode2020/blob/main/Day18.hs>
 - Evaluate sub expressions in Vim (this evaluates expressions one at a time disregarding priority, or puts everything on one line then evaluate exprs one by one inverting `*` and `+` precedence, see [day 18][d18]):
 
@@ -71,7 +94,7 @@ or
 - In Smalltalk, `Compiler`'s `#evaluate:` method can evaluate strings
 - `Control.Applicative` can help transpose lists:
 
-```
+```haskell
 transpose :: [[a]] -> [[a]]
 transpose = getZipList . traverse ZipList
 ```
