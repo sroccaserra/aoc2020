@@ -16,7 +16,7 @@ labelId =
 line = munch1 (`elem` ".#")
 tiles = many1 (Tile <$> labelId <*> sepBy1 line (char '\n'))
 
-partOne ts = isAssembled $ fromTileSet ts
+partOne = find isAssembled . borderSets
 
 data Tile = Tile Int [String]
           deriving (Show)
@@ -30,8 +30,12 @@ data Borders = Borders Int String String String String
 data BorderSet = BorderSet Int (V.Vector Borders)
                deriving (Show)
 
+borderSets (TileSet r ts) = map (fromTiles r) ps
+  where ps = permutations ts
+
 fromTile (Tile i xs@(s:_)) = Borders i s (map last xs) (last xs) (map head xs)
-fromTileSet (TileSet r ts) = BorderSet r (V.fromList $ map fromTile ts)
+fromTiles r ts = BorderSet r $ V.fromList $ (map fromTile) ts
+fromTileSet (TileSet r ts) = fromTiles r ts
 
 rotate (Borders i t r b l) = Borders i (reverse l) t (reverse r) b
 
