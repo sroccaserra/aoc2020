@@ -16,7 +16,7 @@ labelId =
 line = munch1 (`elem` ".#")
 tiles = many1 (Tile <$> labelId <*> sepBy1 line (char '\n'))
 
-partOne = fromTileSet
+partOne ts = isAssembled $ fromTileSet ts
 
 data Tile = Tile Int [String]
           deriving (Show)
@@ -37,3 +37,12 @@ rotate (Borders i t r b l) = Borders i (reverse l) t (reverse r) b
 
 fitsLTR (Borders _ _ r _ _) (Borders _ _ _ _ l) = r == l
 fitsTTB (Borders _ _ _ b _) (Borders _ t _ _ _) = b == t
+
+isAssembled bs = isAssembledH bs && isAssembledV bs
+
+isAssembledH bs@(BorderSet r _) = foldl' (\a j -> a && isRowAssembled bs j) True [0..r-2]
+isRowAssembled (BorderSet r xs) j = foldl' (\a i -> a && fitsLTR (xs V.! (i+di)) (xs V.! (i+1+di))) True [0..r-2]
+  where di = j*r
+
+isAssembledV bs@(BorderSet r _) = foldl' (\a i -> a && isColumnAssembled bs i) True [0..r-2]
+isColumnAssembled (BorderSet r xs) i = foldl' (\a j -> a && fitsTTB (xs V.! (j*r+i)) (xs V.! ((j+1)*r+i))) True [0..r-2]
