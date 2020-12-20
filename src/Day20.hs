@@ -4,6 +4,7 @@ import Data.Char
 import Text.ParserCombinators.ReadP
 import Data.List
 import Data.Maybe
+import Control.Monad
 
 maino = interact $ unlines . (map show) . partTwo . parse
 main = do
@@ -20,11 +21,16 @@ printTile (Tile i xs) = do
 partOne (TileSet _ ts) = findPiecesWithNbCommons 2 bs
   where bs = map borders ts
 
-partTwo (TileSet _ ts) = findTile ts corner : (map (findTile ts) $ findMatchingPieces rims corner)
+partTwo (TileSet _ ts) = step ([],corner, exclude corner rims)
   where bs = map borders ts
-        other = head $ findMatchingPieces rims corner
-        corner = head $ findPiecesWithNbCommons 2 bs
-        rims = findPiecesWithNbCommons 3 bs
+        corner = findTile ts $ head $ findPiecesWithNbCommons 2 bs
+        rims = map (findTile ts) $ findPiecesWithNbCommons 3 bs
+
+step (aligned, current, []) = current:aligned
+step (aligned,current,toAlign) = step (current:aligned, next,exclude next toAlign)
+  where next = fromJust $ findMatchingTile toAlign current
+
+exclude (Tile i _) ts = filter (\(Tile i' _) -> i' /= i) ts
 
 data TileSet = TileSet Int [Tile]
              deriving (Show)
@@ -57,6 +63,10 @@ countCommonsFromList bs b@(Borders _ xs) = (b,n)
 
 countCommon (Borders _ xs) fs = length $ filter (`elem` xs) fs
 
+findMatchingTiles ts t = catMaybes $ map (alignTo t) ts
+findMatchingTile ts t = msum $ map (alignTo t) ts
+
+alignTo (Tile i1 _) (Tile i2 _) | i1 == i2 = Nothing
 alignTo t1 t2 = find (matches t1) (rotations ++ flipedRotations)
   where rotations = take 4 $ iterate rotate t2
         flipedRotations = take 4 $ iterate rotate (flipTile t2)
