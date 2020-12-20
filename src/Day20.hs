@@ -2,8 +2,6 @@ module Day20 where
 
 import Data.Char
 import Text.ParserCombinators.ReadP
-import Data.List
-import qualified Data.Vector as V
 
 main = interact $ show . partOne . parse
 
@@ -16,37 +14,26 @@ labelId =
 line = munch1 (`elem` ".#")
 tiles = many1 (Tile <$> labelId <*> sepBy1 line (char '\n'))
 
-partOne = find isAssembled . borderSets
-
-data Tile = Tile Int [String]
-          deriving (Show)
+partOne (TileSet _ ts) = filter (\(_,n) -> n == 2) $ map (countCommonsFromList bs) bs
+  where bs = map borders ts
 
 data TileSet = TileSet Int [Tile]
              deriving (Show)
 
-data Borders = Borders Int String String String String
-             deriving (Show)
+data Tile = Tile Int [String]
+          deriving (Show)
 
-data BorderSet = BorderSet Int (V.Vector Borders)
-               deriving (Show)
+data Borders = Borders Int [String]
+             deriving (Show, Eq)
 
-borderSets (TileSet r ts) = map (fromTiles r) ps
-  where ps = permutations ts
+borders (Tile i xs) = Borders i [head xs,map last xs,last xs,map head xs]
 
-fromTile (Tile i xs@(s:_)) = Borders i s (map last xs) (last xs) (map head xs)
-fromTiles r ts = BorderSet r $ V.fromList $ (map fromTile) ts
-fromTileSet (TileSet r ts) = fromTiles r ts
+countCommonsFromList bs b@(Borders _ xs) = (b,n)
+  where n = foldl (\a x -> a + countCommon x flips) 0 others
+        others = filter (/= b) bs
+        flips = xs ++ (map reverse xs)
 
-rotate (Borders i t r b l) = Borders i (reverse l) t (reverse r) b
+countCommon (Borders _ xs) fs = length $ filter (`elem` xs) fs
 
-fitsLTR (Borders _ _ r _ _) (Borders _ _ _ _ l) = r == l
-fitsTTB (Borders _ _ _ b _) (Borders _ t _ _ _) = b == t
-
-isAssembled bs = isAssembledH bs && isAssembledV bs
-
-isAssembledH bs@(BorderSet r _) = foldl' (\a j -> a && isRowAssembled bs j) True [0..r-2]
-isRowAssembled (BorderSet r xs) j = foldl' (\a i -> a && fitsLTR (xs V.! (i+di)) (xs V.! (i+1+di))) True [0..r-2]
-  where di = j*r
-
-isAssembledV bs@(BorderSet r _) = foldl' (\a i -> a && isColumnAssembled bs i) True [0..r-2]
-isColumnAssembled (BorderSet r xs) i = foldl' (\a j -> a && fitsTTB (xs V.! (j*r+i)) (xs V.! ((j+1)*r+i))) True [0..r-2]
+-- fitsLTR (Borders _ [_,r,_,_]) (Borders _ [_,_,_,l]) = r == l
+-- fitsTTB (Borders _ [_,_,b,_]) (Borders _ [t,_,_,_]) = b == t
