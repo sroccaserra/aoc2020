@@ -2,23 +2,27 @@ module Day20 where
 
 import Data.Char
 import Text.ParserCombinators.ReadP
+import Data.List
+import Data.Maybe
 
-main = interact $ unlines . (map show) . partTwo . parse
+maino = interact $ unlines . (map show) . partTwo . parse
+main = do
+  s <- getContents
+  let ts = parse s
+  let res = partTwo ts
+  mapM_ printTile res
 
-parse s = TileSet side ts
-  where ts = fst $ last $ readP_to_S tiles s
-        side = round $ sqrt (fromIntegral $ length ts)
-
-labelId =
-  read <$> (skipSpaces *> string "Tile " *> munch isDigit <* string ":" <* skipSpaces)
-line = munch1 (`elem` ".#")
-tiles = many1 (Tile <$> labelId <*> sepBy1 line (char '\n'))
+printTile :: Tile -> IO ()
+printTile (Tile i xs) = do
+  print i
+  mapM_ putStrLn xs
 
 partOne (TileSet _ ts) = findPiecesWithNbCommons 2 bs
   where bs = map borders ts
 
-partTwo (TileSet _ ts) = corner:findMatchingPieces rims corner
+partTwo (TileSet _ ts) = findTile ts corner : (map (findTile ts) $ findMatchingPieces rims corner)
   where bs = map borders ts
+        other = head $ findMatchingPieces rims corner
         corner = head $ findPiecesWithNbCommons 2 bs
         rims = findPiecesWithNbCommons 3 bs
 
@@ -30,6 +34,8 @@ data Tile = Tile Int [String]
 
 data Borders = Borders Int [String]
              deriving (Show, Eq)
+
+findTile ts (Borders i _) = fromJust $ find (\(Tile i' _) -> i == i') ts
 
 findCorner = findPiecesWithNbCommons 2
 
@@ -51,8 +57,42 @@ countCommonsFromList bs b@(Borders _ xs) = (b,n)
 
 countCommon (Borders _ xs) fs = length $ filter (`elem` xs) fs
 
+alignTo t1 t2 = find (matches t1) (rotations ++ flipedRotations)
+  where rotations = take 4 $ iterate rotate t2
+        flipedRotations = take 4 $ iterate rotate (flipTile t2)
+
+matches t1 t2 =
+  (top t1) == (bottom t2)
+    || (right t1) == (left t2)
+    || (bottom t1) == (top t2)
+    || (left t1) == (right t2)
+
+top (Tile _ xs) = head xs
+right (Tile _ xs) = map last xs
+bottom (Tile _ xs) = last xs
+left (Tile _ xs) = map head xs
+
+rotate (Tile i xs) = Tile i (rotateLeft xs)
+flipTile (Tile i xs) = Tile i (map reverse xs)
+
+rotateLeft :: [[a]] -> [[a]]
+rotateLeft = reverse . transpose
+rotateRight :: [[a]] -> [[a]]
+rotateRight = transpose . reverse
+
 -- solveRims rs = findCommon start rs
 --   where start = head rs
 
 -- fitsLTR (Borders _ [_,r,_,_]) (Borders _ [_,_,_,l]) = r == l
 -- fitsTTB (Borders _ [_,_,b,_]) (Borders _ [t,_,_,_]) = b == t
+
+parse s = TileSet side ts
+  where ts = parseTiles s
+        side = round $ sqrt (fromIntegral $ length ts)
+
+parseTiles :: String -> [Tile]
+parseTiles = fst . last . readP_to_S tiles
+
+labelId = read <$> (skipSpaces *> string "Tile " *> munch isDigit <* string ":" <* skipSpaces)
+line = skipSpaces *> munch1 (`elem` ".#") <* skipMany (char ' ')
+tiles = many1 (Tile <$> labelId <*> sepBy1 line (char '\n'))
