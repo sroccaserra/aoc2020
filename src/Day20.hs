@@ -8,16 +8,6 @@ import Control.Monad
 import qualified Data.Vector as V
 
 main = interact $ unlines . (map show) . partTwo . parse
--- main = do
---   s <- getContents
---   let ts = parse s
---   let res = partTwo ts
---   mapM_ (mapM_ printTile) res
-
-printTile :: Tile -> IO ()
-printTile (Tile i xs) = do
-  print i
-  mapM_ putStrLn xs
 
 partOne (TileSet _ ts) = findPiecesWithNbCommons 2 bs
   where bs = map borders ts
@@ -29,9 +19,39 @@ partOne (TileSet _ ts) = findPiecesWithNbCommons 2 bs
 -- - [X] itérer de (0,0) à (n,n) en cherchant les voisins sur une seule tranche
 --       -> image.
 -- - [X] Supplimer les coutures
--- - [ ] chercher les serpents de mer.
+-- - [X] chercher les serpents de mer.
 
-partTwo tileSet = solveJigsawPuzzle tileSet
+partTwo tileSet = [nbSeaMonsters, (countSharps image) - 15*nbSeaMonsters]
+  where image = solveJigsawPuzzle tileSet
+        nbSeaMonsters = countSeaMonsters $ map reverse $ image
+
+---
+-- Searching for sea monsters
+
+countSharps = sum . map (length . filter (== '#'))
+
+countSeaMonsters sea = foldl (\accy y ->
+                              (foldl (\accx x ->
+                                accx + countSeaMonsterAt (x,y)) accy [0..w-20])) 0 [0..h-3]
+  where w = length $ head sea
+        h = length sea
+        countSeaMonsterAt (x,y) = if hasSeaMonster sea (x,y) then 1 else 0
+
+hasSeaMonster image (x,y) = foldl (\acc (x',y') -> acc && ('#' == (image !! (y+y') !! (x+x')))) True seaMonsterCoords
+
+seaMonsterCoords = coordsFromMotif seaMonster
+
+seaMonster = ["                  # "
+             ,"#    ##    ##    ###"
+             ," #  #  #  #  #  #   "]
+
+coordsFromMotif motif = foldl (\acc j -> acc ++ mapRow j) [] [0..h-1]
+  where w = length $ head motif
+        h = length motif
+        mapRow j = foldl (\acc i -> if (motif !! j !! i) == '#' then (i,j):acc else acc) [] [0..w-1]
+
+---
+-- Solving the jigsaw puzzle
 
 solveJigsawPuzzle (TileSet r ts) = transpose image
   where bs = map borders ts
