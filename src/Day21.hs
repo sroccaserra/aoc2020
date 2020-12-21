@@ -6,7 +6,7 @@ import Data.Maybe
 import Text.ParserCombinators.ReadP
 import qualified Data.Map as M
 
-main = interact $ show . partOne . (map parseLine) . lines
+main = interact $ show . partTwo . (map parseLine) . lines
 
 parseLine = fst . last . readP_to_S parser
 
@@ -26,6 +26,12 @@ partOne xs = length $ filter (`elem` alergenFree) $ foldl1 (++) $ map fst xs
         hints = map (\x -> (x,foldl1 intersect $ m M.! x)) alergens
         conversion = map (\(a, [i]) -> (a,i)) $ solve [] hints
         alergenFree = ingredients \\ (map snd conversion)
+
+partTwo xs = intercalate "," $ map snd $ sort conversion
+  where alergens = nub $ concat $ map snd xs
+        m = foldl step M.empty xs
+        hints = map (\x -> (x,foldl1 intersect $ m M.! x)) alergens
+        conversion = map (\(a, [i]) -> (a,i)) $ solve [] hints
 
 step m (is, as) = foldl (\acc a -> M.insertWith (++) a [is] acc) m as
 
