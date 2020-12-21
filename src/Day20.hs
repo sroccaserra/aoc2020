@@ -32,10 +32,12 @@ partTwo' (TileSet _ ts) = alignSpiral [corner] (exclude corner ts)
 --       gauche (0,0).
 -- - [X] itérer de (0,0) à (n,n) en cherchant les voisins sur une seule tranche
 --       -> image.
--- - [ ] Supplimer les coutures
+-- - [X] Supplimer les coutures
 -- - [ ] chercher les serpents de mer.
 
-partTwo (TileSet r ts) = image
+partTwo tileSet = solveJigsawPuzzle tileSet
+
+solveJigsawPuzzle (TileSet r ts) = transpose image
   where bs = map borders ts
         corner = findTile ts $ head $ findPiecesWithNbCommons 2 bs
         tl = makeTopLeftCorner corner ts
@@ -43,12 +45,17 @@ partTwo (TileSet r ts) = image
         tileMap = buildTileMap row r ts
         image = buildImage tileMap
 
-buildImage tileMap = concat $ V.toList $ V.map buildFromRow tileMap
+buildImage tileMap = concat $ V.toList $ V.map buildFromRow cropedTiles
+  where cropedTiles = V.map (V.map cropTile) tileMap
 
 buildFromRow r = toLines $ V.toList $ V.map toStringList r
 
 toStringList (Tile _ xs) = xs
 toLines = map concat . transpose
+
+cropTile (Tile i xs) = Tile i (cropList $ map cropList xs)
+
+cropList = tail . init
 
 buildTileMap firstRow r ts = foldl (\acc _ -> buildNextRow acc r ts) (V.fromList [firstRow]) [1..r-1]
 
