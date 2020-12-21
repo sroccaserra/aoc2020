@@ -5,6 +5,7 @@ import Text.ParserCombinators.ReadP
 import Data.List
 import Data.Maybe
 import Control.Monad
+import qualified Data.Vector as V
 
 maino = interact $ unlines . (map show) . partTwo . parse
 main = do
@@ -21,15 +22,32 @@ printTile (Tile i xs) = do
 partOne (TileSet _ ts) = findPiecesWithNbCommons 2 bs
   where bs = map borders ts
 
--- Plan : choisir un coin, et ses deux voisins, le tourner jusqu'à ce qu'il ait
--- un voisin à droite et un voisin en bas -> c'est le coin en haut à gauche
--- (0,0).
--- Ensuite, itérer de (0,0) à (n,n) en cherchant les voisins sur une seule
--- tranche -> image.
--- Ensuite chercher les serpents de mer.
-partTwo (TileSet _ ts) = alignSpiral [corner] (exclude corner ts)
+partTwo' (TileSet _ ts) = alignSpiral [corner] (exclude corner ts)
   where bs = map borders ts
         corner = findTile ts $ head $ findPiecesWithNbCommons 2 bs
+
+-- Plan :
+-- - [X] choisir un coin, et ses deux voisins, le tourner jusqu'à ce qu'il ait
+--       un voisin à droite et un voisin en bas -> c'est le coin en haut à
+--       gauche (0,0).
+-- - [ ] itérer de (0,0) à (n,n) en cherchant les voisins sur une seule tranche
+--       -> image.
+-- - [ ] chercher les serpents de mer.
+
+partTwo (TileSet r ts) = V.toList $ alignRowFromLeftTile r ts tl
+  where bs = map borders ts
+        corner = findTile ts $ head $ findPiecesWithNbCommons 2 bs
+        tl = makeTopLeftCorner corner ts
+
+alignRowFromLeftTile r ts tl = foldl (\acc _ -> alignRightMatch acc ts) (V.fromList [tl]) [1..r-1]
+
+alignRightMatch v ts = V.snoc v rm
+  where l = V.last v
+        rm = fromJust $ findRightMatch ts l
+
+makeTopLeftCorner corner ts = if isJust r && isJust b then corner else makeTopLeftCorner (rotate corner) ts
+  where r = findRightMatch ts corner
+        b = findBottomMatch ts corner
 
 alignSpiral aligned [] = aligned
 alignSpiral aligned ts = alignSpiral (alignedRim++aligned) (excludeTiles (map tileId rims) ts)
@@ -80,10 +98,19 @@ countCommon (Borders _ xs) fs = length $ filter (`elem` xs) fs
 findMatchingTiles ts t = catMaybes $ map (alignTo t) ts
 findMatchingTile ts t = msum $ map (alignTo t) ts
 
+findRightMatch ts t = msum $ map (alignRight t) ts
+findBottomMatch ts t = msum $ map (alignBottom t) ts
+
 alignTo (Tile i1 _) (Tile i2 _) | i1 == i2 = Nothing
 alignTo t1 t2 = find (matches t1) (rotations ++ flipedRotations)
   where rotations = take 4 $ iterate rotate t2
         flipedRotations = take 4 $ iterate rotate (flipTile t2)
+
+alignRight (Tile i1 _) (Tile i2 _) | i1 == i2 = Nothing
+alignRight t1 t2 = find (matchesRight t1) (rotations t2 ++ flipedRotations t2)
+
+alignBottom (Tile i1 _) (Tile i2 _) | i1 == i2 = Nothing
+alignBottom t1 t2 = find (matchesBottom t1) (rotations t2 ++ flipedRotations t2)
 
 matches t1 t2 =
   (top t1) == (bottom t2)
@@ -91,12 +118,18 @@ matches t1 t2 =
     || (bottom t1) == (top t2)
     || (left t1) == (right t2)
 
+matchesRight t1 t2 = right t1 == left t2
+matchesBottom t1 t2 = bottom t1 == top t2
+
 top (Tile _ xs) = head xs
 right (Tile _ xs) = map last xs
 bottom (Tile _ xs) = last xs
 left (Tile _ xs) = map head xs
 
+rotations = take 4 . iterate rotate
 rotate (Tile i xs) = Tile i (rotateLeft xs)
+
+flipedRotations = take 4 . iterate rotate . flipTile
 flipTile (Tile i xs) = Tile i (map reverse xs)
 
 rotateLeft :: [[a]] -> [[a]]
