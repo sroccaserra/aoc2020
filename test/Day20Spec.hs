@@ -62,16 +62,6 @@ spec =
       let ts = parseTiles (tile_1117_s ++ tile_2003_s)
       length ts `shouldBe` 2
 
-    it "aligns to another tile" $ do
-      let tile_1117:tile_2003:_ = parseTiles $ tile_1117_s ++ tile_2003_s
-      let Just (Tile _ xs) = alignTo tile_1117 tile_2003
-      head xs `shouldBe` "##....#.##"
-
-    it "aligns to another tile" $ do
-      let tile_1117:tile_1559:_ = parseTiles $ tile_1117_s ++ tile_1559_s
-      let Just (Tile _ xs) = alignTo tile_1117 tile_1559
-      head xs `shouldBe` "#..##.#.#."
-
     it "flips a tile" $ do
       let [t] = parseTiles tile_small_s
       let (Tile _ xs) = flipTile t
