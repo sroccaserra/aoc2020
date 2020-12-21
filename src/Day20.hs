@@ -21,16 +21,24 @@ printTile (Tile i xs) = do
 partOne (TileSet _ ts) = findPiecesWithNbCommons 2 bs
   where bs = map borders ts
 
-partTwo (TileSet _ ts) = step ([],corner, exclude corner rims)
+partTwo (TileSet _ ts) = alignSpiral [corner] (exclude corner ts)
   where bs = map borders ts
         corner = findTile ts $ head $ findPiecesWithNbCommons 2 bs
-        rims = map (findTile ts) $ findPiecesWithNbCommons 3 bs
 
-step (aligned, current, []) = current:aligned
-step (aligned,current,toAlign) = step (current:aligned, next,exclude next toAlign)
+alignSpiral aligned [] = aligned
+alignSpiral aligned ts = alignSpiral (alignedRim++aligned) (excludeTiles (map tileId rims) ts)
+  where bs = map borders ts
+        current = head aligned
+        rims = map (findTile ts) $ findPiecesWithNbCommons 3 bs
+        alignedRim = exclude current $ alignRim ([],current,rims)
+
+alignRim (aligned, current, []) = current:aligned
+alignRim (aligned,current,toAlign) = alignRim (current:aligned, next,exclude next toAlign)
   where next = fromJust $ findMatchingTile toAlign current
 
+tileId (Tile i _) = i
 exclude (Tile i _) ts = filter (\(Tile i' _) -> i' /= i) ts
+excludeTiles toExclude ts = filter (\(Tile i _) -> not (elem i toExclude)) ts
 
 data TileSet = TileSet Int [Tile]
              deriving (Show)
