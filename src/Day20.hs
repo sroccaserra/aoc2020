@@ -7,12 +7,12 @@ import Data.Maybe
 import Control.Monad
 import qualified Data.Vector as V
 
-maino = interact $ unlines . (map show) . partTwo . parse
-main = do
-  s <- getContents
-  let ts = parse s
-  let res = partTwo ts
-  mapM_ printTile res
+main = interact $ unlines . (map show) . partTwo . parse
+-- main = do
+--   s <- getContents
+--   let ts = parse s
+--   let res = partTwo ts
+--   mapM_ (mapM_ printTile) res
 
 printTile :: Tile -> IO ()
 printTile (Tile i xs) = do
@@ -30,14 +30,32 @@ partTwo' (TileSet _ ts) = alignSpiral [corner] (exclude corner ts)
 -- - [X] choisir un coin, et ses deux voisins, le tourner jusqu'à ce qu'il ait
 --       un voisin à droite et un voisin en bas -> c'est le coin en haut à
 --       gauche (0,0).
--- - [ ] itérer de (0,0) à (n,n) en cherchant les voisins sur une seule tranche
+-- - [X] itérer de (0,0) à (n,n) en cherchant les voisins sur une seule tranche
 --       -> image.
+-- - [ ] Supplimer les coutures
 -- - [ ] chercher les serpents de mer.
 
-partTwo (TileSet r ts) = V.toList $ alignRowFromLeftTile r ts tl
+partTwo (TileSet r ts) = image
   where bs = map borders ts
         corner = findTile ts $ head $ findPiecesWithNbCommons 2 bs
         tl = makeTopLeftCorner corner ts
+        row = alignRowFromLeftTile r ts tl
+        tileMap = buildTileMap row r ts
+        image = buildImage tileMap
+
+buildImage tileMap = concat $ V.toList $ V.map buildFromRow tileMap
+
+buildFromRow r = toLines $ V.toList $ V.map toStringList r
+
+toStringList (Tile _ xs) = xs
+toLines = map concat . transpose
+
+buildTileMap firstRow r ts = foldl (\acc _ -> buildNextRow acc r ts) (V.fromList [firstRow]) [1..r-1]
+
+buildNextRow rows r ts = V.snoc rows newRow
+  where seed = V.head $ V.last rows
+        leftTile = fromJust $ findBottomMatch ts seed
+        newRow = alignRowFromLeftTile r ts leftTile
 
 alignRowFromLeftTile r ts tl = foldl (\acc _ -> alignRightMatch acc ts) (V.fromList [tl]) [1..r-1]
 
