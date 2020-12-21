@@ -6,7 +6,7 @@ import Data.Maybe
 import Text.ParserCombinators.ReadP
 import qualified Data.Map as M
 
-main = interact $ unlines . (map show) . partOne . (map parseLine) . lines
+main = interact $ show . partOne . (map parseLine) . lines
 
 parseLine = fst . last . readP_to_S parser
 
@@ -19,10 +19,13 @@ parser = do
 word = munch1 isAlpha
 spaces = munch1 isSpace
 
-partOne xs = map (\(a, [i]) -> (a,i)) $ solve [] hints
+partOne xs = length $ filter (`elem` alergenFree) $ foldl1 (++) $ map fst xs
   where alergens = nub $ concat $ map snd xs
+        ingredients = nub $ concat $ map fst xs
         m = foldl step M.empty xs
         hints = map (\x -> (x,foldl1 intersect $ m M.! x)) alergens
+        conversion = map (\(a, [i]) -> (a,i)) $ solve [] hints
+        alergenFree = ingredients \\ (map snd conversion)
 
 step m (is, as) = foldl (\acc a -> M.insertWith (++) a [is] acc) m as
 
