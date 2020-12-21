@@ -21,6 +21,12 @@ printTile (Tile i xs) = do
 partOne (TileSet _ ts) = findPiecesWithNbCommons 2 bs
   where bs = map borders ts
 
+-- Plan : choisir un coin, et ses deux voisins, le tourner jusqu'à ce qu'il ait
+-- un voisin à droite et un voisin en bas -> c'est le coin en haut à gauche
+-- (0,0).
+-- Ensuite, itérer de (0,0) à (n,n) en cherchant les voisins sur une seule
+-- tranche -> image.
+-- Ensuite chercher les serpents de mer.
 partTwo (TileSet _ ts) = alignSpiral [corner] (exclude corner ts)
   where bs = map borders ts
         corner = findTile ts $ head $ findPiecesWithNbCommons 2 bs
