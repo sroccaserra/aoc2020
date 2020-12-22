@@ -11,12 +11,16 @@ player2Deck = [34,12,2,50,16,1,44,11,36,6,10,42,20,8,46,9,37,4,7,18,23,39,30,33,
 player1DeckEx = [9,2,6,3,1]
 player2DeckEx = [5,8,4,7,10]
 
+player1DeckLooping = [43,19]
+player2DeckLooping = [2,29,14]
+
 partOne = score finalRound
   where finalRound = combat player1Deck player2Deck
 
 partTwo = score finalRound
   where finalRound = combatRec M.empty S.empty player1Deck player2Deck
-  -- where finalRound = combatRec M.empty S.empty player1DeckEx player2DeckEx
+--   where finalRound = combatRec M.empty S.empty player1DeckEx player2DeckEx
+--   where finalRound = combatRec M.empty S.empty player1DeckLooping player2DeckLooping
 
 score deck = sum $ zipWith (*) (reverse [1..length deck]) deck
 
@@ -30,8 +34,10 @@ combatRec _ _ p1d [] = p1d
 combatRec _ s p1d p2d | S.member (p1d,p2d) s = p1d
 combatRec m s (x:p1d) (y:p2d) | isSubgame (x:p1d) (y:p2d) =
   combatRec m' s' (p1d++xs) (p2d++ys)
-  where (xs,ys,m') = subgame m S.empty (x,y,(p1d,p2d)) p1d p2d
+  where (xs,ys,m') = subgame m S.empty (x,y,(subDeck1,subDeck2)) subDeck1 subDeck2
         s' = S.insert ((x:p1d), (y:p2d)) s
+        subDeck1 = take x p1d
+        subDeck2 = take y p2d
 combatRec m s (x:p1d) (y:p2d) | x > y = combatRec m s' (p1d++[x,y]) p2d
   where s' = S.insert ((x:p1d), (y:p2d)) s
 combatRec m s (x:p1d) (y:p2d) = combatRec m s' p1d (p2d++[y,x])
@@ -52,8 +58,10 @@ subgame m s (x,y,decks) p1d p2d | S.member (p1d,p2d) s = ([x,y],[],m')
 
 subgame m s (x,y,decks) (a:p1d) (b:p2d) | isSubgame (a:p1d) (b:p2d) =
   subgame m' s' (x,y,decks) (p1d++xs) (p2d++ys)
-  where (xs,ys,m') = subgame m S.empty (a,b,(p1d,p2d)) p1d p2d
+  where (xs,ys,m') = subgame m S.empty (a,b,(subDeck1,subDeck2)) subDeck1 subDeck2
         s' = S.insert ((a:p1d),(b:p2d)) s
+        subDeck1 = take a p1d
+        subDeck2 = take b p2d
 
 subgame m s (x,y,decks) (a:p1d) (b:p2d) | a > b = subgame m s' (x,y,decks) (p1d++[a,b]) p2d
   where s' = S.insert ((a:p1d),(b:p2d)) s
