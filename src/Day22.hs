@@ -1,7 +1,6 @@
 module Day22 where
 
 import qualified Data.Set as S
-import qualified Data.Map.Strict as M
 
 main = print partTwo
 
@@ -18,9 +17,9 @@ partOne = score finalRound
   where finalRound = combat player1Deck player2Deck
 
 partTwo = score finalRound
-  where finalRound = combatRec M.empty S.empty player1Deck player2Deck
---   where finalRound = combatRec M.empty S.empty player1DeckEx player2DeckEx
---   where finalRound = combatRec M.empty S.empty player1DeckLooping player2DeckLooping
+  where finalRound = combatRec S.empty player1Deck player2Deck
+--   where finalRound = combatRec S.empty player1DeckEx player2DeckEx
+--   where finalRound = combatRec S.empty player1DeckLooping player2DeckLooping
 
 score deck = sum $ zipWith (*) (reverse [1..length deck]) deck
 
@@ -29,45 +28,37 @@ combat p1d [] = p1d
 combat (x:p1d) (y:p2d) | x > y = combat (p1d++[x,y]) p2d
 combat (x:p1d) (y:p2d) = combat p1d (p2d++[y,x])
 
-combatRec _ _ [] p2d = p2d
-combatRec _ _ p1d [] = p1d
-combatRec _ s p1d p2d | S.member (p1d,p2d) s = p1d
-combatRec m s (x:p1d) (y:p2d) | isSubgame (x:p1d) (y:p2d) =
-  combatRec m' s' (p1d++xs) (p2d++ys)
-  where (xs,ys,m') = subgame m S.empty (x,y,(subDeck1,subDeck2)) subDeck1 subDeck2
+combatRec _ [] p2d = p2d
+combatRec _ p1d [] = p1d
+combatRec s p1d p2d | S.member (p1d,p2d) s = p1d
+combatRec s (x:p1d) (y:p2d) | isSubgame (x:p1d) (y:p2d) =
+  combatRec s' (p1d++xs) (p2d++ys)
+  where (xs,ys) = subgame S.empty (x,y) subDeck1 subDeck2
         s' = S.insert ((x:p1d), (y:p2d)) s
         subDeck1 = take x p1d
         subDeck2 = take y p2d
-combatRec m s (x:p1d) (y:p2d) | x > y = combatRec m s' (p1d++[x,y]) p2d
+combatRec s (x:p1d) (y:p2d) | x > y = combatRec s' (p1d++[x,y]) p2d
   where s' = S.insert ((x:p1d), (y:p2d)) s
-combatRec m s (x:p1d) (y:p2d) = combatRec m s' p1d (p2d++[y,x])
+combatRec s (x:p1d) (y:p2d) = combatRec s' p1d (p2d++[y,x])
   where s' = S.insert ((x:p1d), (y:p2d)) s
 
 isSubgame (x:p1d) (y:p2d) = x <= (length p1d) && y <= (length p2d)
 isSubgame _ _ = error "wrong subgame"
 
-subgame :: M.Map ([Int],[Int]) Player -> S.Set ([Int],[Int]) -> (Int,Int,([Int],[Int])) -> [Int] -> [Int] -> ([Int],[Int],M.Map ([Int],[Int]) Player)
-subgame m _ (x,y,decks) _ _ | M.member decks m = if w == P1 then ([x,y],[],m) else ([],[y,x],m)
-  where w = m M.! decks
-subgame m _ (x,y,decks) [] _ = ([],[y,x],m')
-  where m' = M.insert decks P2 m
-subgame m _ (x,y,decks) _ [] = ([x,y],[],m')
-  where m' = M.insert decks P1 m
-subgame m s (x,y,decks) p1d p2d | S.member (p1d,p2d) s = ([x,y],[],m')
-  where m' = M.insert decks P1 m
+subgame :: S.Set ([Int],[Int]) -> (Int,Int) -> [Int] -> [Int] -> ([Int],[Int])
+subgame _ (x,y) [] _ = ([],[y,x])
+subgame _ (x,y) _ [] = ([x,y],[])
+subgame s (x,y) p1d p2d | S.member (p1d,p2d) s = ([x,y],[])
 
-subgame m s (x,y,decks) (a:p1d) (b:p2d) | isSubgame (a:p1d) (b:p2d) =
-  subgame m' s' (x,y,decks) (p1d++xs) (p2d++ys)
-  where (xs,ys,m') = subgame m S.empty (a,b,(subDeck1,subDeck2)) subDeck1 subDeck2
+subgame s (x,y) (a:p1d) (b:p2d) | isSubgame (a:p1d) (b:p2d) =
+  subgame s' (x,y) (p1d++xs) (p2d++ys)
+  where (xs,ys) = subgame S.empty (a,b) subDeck1 subDeck2
         s' = S.insert ((a:p1d),(b:p2d)) s
         subDeck1 = take a p1d
         subDeck2 = take b p2d
 
-subgame m s (x,y,decks) (a:p1d) (b:p2d) | a > b = subgame m s' (x,y,decks) (p1d++[a,b]) p2d
+subgame s (x,y) (a:p1d) (b:p2d) | a > b = subgame s' (x,y) (p1d++[a,b]) p2d
   where s' = S.insert ((a:p1d),(b:p2d)) s
 
-subgame m s (x,y,decks) (a:p1d) (b:p2d) = subgame m s' (x,y,decks) p1d (p2d++[b,a])
+subgame s (x,y) (a:p1d) (b:p2d) = subgame s' (x,y) p1d (p2d++[b,a])
   where s' = S.insert ((a:p1d),(b:p2d)) s
-
-data Player = P1 | P2
-            deriving (Eq)
