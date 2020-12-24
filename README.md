@@ -195,4 +195,5 @@ main = do
 - <https://two-wrongs.com/parser-combinators-parsing-for-haskell-beginners>
 - <https://github.com/Morendil/AdventOfCode2019>
 - <https://ravichugh.gitbooks.io/a-quarter-of-haskell/content/parsing/more.html>
+- <https://haskell-containers.readthedocs.io/en/latest/sequence.html>
 - <https://www.redblobgames.com/grids/hexagons/>
