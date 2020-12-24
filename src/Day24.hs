@@ -2,16 +2,23 @@ module Day24 where
 
 import Control.Applicative
 import Data.List
+import Data.Map (Map)
+import qualified Data.Map as Map
 import Text.ParserCombinators.ReadP
 
+type Path = [Direction]
 data Direction = E | SE | SW | W | NW | NE
                deriving (Show,Eq)
 
+type Grid = Map Point Color
 type Point = (Int,Int,Int)
+data Color = Black | White
+           deriving (Show,Eq)
 
-main = interact $ unlines . (map show) . partOne . (map parseLine) . lines
+main = interact $ show . partTwo . (map parseLine) . lines
 
-partOne = (:[]) . sum . map ((`mod` 2) . snd) . uniqCount . map (followPath (0,0,0))
+partOne :: [Path] -> Int
+partOne = Map.size . initialGrid
 
 followPath p xs = foldl move p xs
 
@@ -21,6 +28,15 @@ move (x,y,z) SW = (x-1,y,z+1)
 move (x,y,z) W = (x-1,y+1,z)
 move (x,y,z) NW = (x,y+1,z-1)
 move (x,y,z) NE = (x+1,y,z-1)
+
+partTwo = initialGrid
+
+initialGrid :: [Path] -> Grid
+initialGrid xs = Map.fromList $ map (\x -> (x,Black)) blackPoints
+  where blackPoints = map fst $ filter (odd . snd) $ uniqCount $ map (followPath (0,0,0)) xs
+
+step :: Grid -> Grid
+step g = g
 
 ---
 -- Parsing
