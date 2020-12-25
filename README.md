@@ -80,6 +80,8 @@ or
 
 ### Haskell
 
+- This function to convert a value to a list looks like it 's eating the value: `(:[]) x` returns `[x]` (useful for point free compositions)
+- Use `read :: (String -> Integer)` instead of `Int` or `Int64` when dealing with very very large numbers
 - Combine parsers with `<$>` and `<*>`: `readP_to_S ((\x y -> x:y:[]) <$> get <*> get) "abc"` gives `[("ab", "c")]`. Other example:
 
 ```haskell
@@ -132,7 +134,6 @@ transpose = getZipList . traverse ZipList
 ["0ab0","0ab1","1ab0","1ab1"]
 ```
 
-- I should read and learn [this theorem][cr], it was apparently useful for day 13
 - Reading from `stdin` allows to input lines manually (or paste short examples from the puzzle text) and end by Ctrl+D
 - `Data.Complex` is handy for 2D operations (regular addition translates, `(* (0+:1))` rotates 90 °, `(* -(0:+1))` rotates -90 °)
 - `Data.Maybe.catMaybes` turns a list of `Maybe a` into a list of `a`
@@ -170,7 +171,6 @@ main = do
 [br]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:break
 [cc]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:concat
 [cl]: https://hackage.haskell.org/package/base-4.14.1.0/docs/Text-ParserCombinators-ReadP.html#v:chainl
-[cr]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
 [cy]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:cycle
 [d18]: https://adventofcode.com/2020/day/18
 [dw]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:dropWhile
@@ -189,6 +189,17 @@ main = do
 [sp]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:span
 [tw]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:takeWhile
 [ve]: https://hackage.haskell.org/package/vector-0.12.1.2
+
+### Algorithms & Data structures
+
+- To represent a finite chained list, we can use a fixed size array with each index pointing to its next value (see [day 23](src/day_23.py) ).
+    - `cycle 1:0:2:[]` can be encoded: a[1] = 0, a[0] = 2, a[2] = 1 (this would make the chained list cyclic)
+- I should read and learn [this theorem][cr], it was apparently useful for day 13
+
+- <https://fr.wikipedia.org/wiki/Congruence_lin%C3%A9aire>
+- <http://villemin.gerard.free.fr/ThNbDemo/ModCongr.htm>
+
+[cr]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
 
 ## References
 
