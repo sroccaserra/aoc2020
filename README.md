@@ -107,7 +107,7 @@ test = readP_to_S p
 
 - `ReadP` parsers can be used with the `Monad` interface with `>>=` or `do`, or with the `Applicative` interface with `<$>`, `<*>`, `<*`, `*>` and `<|>`.
 - [chainl][cl] can apply operators while parsing an expression, see <https://github.com/Morendil/AdventOfCode2020/blob/main/Day18.hs>
-- `Control.Applicative` can help transpose lists:
+- `Control.Applicative` can help transpose lists (note that a `transpose` function already exists in `Data.List`):
 
 ```haskell
 transpose :: [[a]] -> [[a]]
@@ -192,14 +192,22 @@ main = do
 
 ### Algorithms & Data structures
 
-- To represent a finite chained list, we can use a fixed size array with each index pointing to its next value (see [day 23](src/day_23.py) ).
+- The [discrete logarithm][dl] _log<sub>b</sub> a_ is the integer _x_ such that _a<sup>x</sup> = b_
+
+> Discrete logarithms are quickly computable in a few special cases. However, no efficient method is known for computing them in general. Several important algorithms in public-key cryptography base their security on the assumption that the discrete logarithm problem over carefully chosen groups has no efficient solution.
+
+- Given a cyclic group of order _n_, a generator _a_ of the group and a group element _b_, the [baby-step giant-step][bg] helps find an integer _x_ such that _a<sup>x</sup> = b_, or _a<sup>x</sup> ≡ b [n]_ (useful for day 25 -- I didn't use it, I learned about it too late)
+- To represent a finite chained list of ints of constant size, we can use a fixed size array with each index pointing to its next value (see [day 23](src/day_23.py) ).
     - `cycle 1:0:2:[]` can be encoded: a[1] = 0, a[0] = 2, a[2] = 1 (this would make the chained list cyclic)
+    - moving around a sublist is O(1), finding the next element of any int is O(1)
 - I should read and learn [this theorem][cr], it was apparently useful for day 13
 
 - <https://fr.wikipedia.org/wiki/Congruence_lin%C3%A9aire>
 - <http://villemin.gerard.free.fr/ThNbDemo/ModCongr.htm>
 
+[bg]: https://en.wikipedia.org/wiki/Baby-step_giant-step
 [cr]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
+[dl]: https://en.wikipedia.org/wiki/Discrete_logarithm
 
 ## References
 
