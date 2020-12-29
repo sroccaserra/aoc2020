@@ -80,6 +80,7 @@ or
 
 ### Haskell
 
+- Use `zipWith ($)` to apply a list of functions to a list of values
 - [until][un] and [takeWhile][tw] can be useful where a `while` loop would be used in other languages
 - This function to convert a value to a list looks like it 's eating the value: `(:[]) x` returns `[x]` (useful for point free compositions)
 - Use `read :: (String -> Integer)` instead of `Int` or `Int64` when dealing with very very large numbers
