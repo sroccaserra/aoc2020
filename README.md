@@ -80,6 +80,7 @@ or
 
 ### Haskell
 
+- [until][un] and [takeWhile][tw] can be useful where a `while` loop would be used in other languages
 - This function to convert a value to a list looks like it 's eating the value: `(:[]) x` returns `[x]` (useful for point free compositions)
 - Use `read :: (String -> Integer)` instead of `Int` or `Int64` when dealing with very very large numbers
 - Combine parsers with `<$>` and `<*>`: `readP_to_S ((\x y -> x:y:[]) <$> get <*> get) "abc"` gives `[("ab", "c")]`. Other example:
@@ -188,6 +189,7 @@ main = do
 [se]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:sequence
 [sp]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:span
 [tw]: https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#v:takeWhile
+[un]: https://hackage.haskell.org/package/base-4.14.1.0/docs/Prelude.html#v:until
 [ve]: https://hackage.haskell.org/package/vector-0.12.1.2
 
 ### Algorithms & Data structures
