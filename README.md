@@ -51,6 +51,8 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
+See also: <https://github.com/sroccaserra/advent-of-code-2019#what-i-learned>
+
 ### Smalltalk
 
 - `Compiler`'s `#evaluate:` method can evaluate strings
