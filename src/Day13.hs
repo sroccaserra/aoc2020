@@ -1,10 +1,9 @@
 module Day13 where
 
-import Data.Int
-import Data.List
+import Control.Monad (zipWithM)
 import Data.List.Split
 
-main = interact $ show . partTwo . (map $ buildInput . words) . lines
+main = putStrLn $ show partTwo
 
 parseInput :: [String] -> (Int, [Int])
 parseInput (x:y:_) = (read x ::Int, map read xs)
@@ -17,25 +16,33 @@ partOne (n,ns) = diffs
 buildInput (x:y:n:[]) = (read x, read y,read n)
 buildInput _ = error "wrong input"
 
-partTwo :: [(Int64,Int64,Int64)] -> Int64
-partTwo = solve
+partTwo :: Either String Int
+partTwo = chineseRemainder [19, 37, 599, 29, 17, 23, 761, 41, 13]
+                           [ 0, 37-13,  599-19, 29-21, 2*17-36, 2*23-42,  761-50, 2*41-60, 5*13-63]
 
-f x y n = f' x x y y n
+-- https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+-- Returns u and v such that au + bv = gcd(a, b)
+egcd :: Int -> Int -> (Int, Int)
+egcd _ 0 = (1, 0)
+egcd a b = (t, s - q * t)
+  where
+    (s, t) = egcd b r
+    (q, r) = a `quotRem` b
 
-f' _ a _ b n | a + n == b = a
-f' x a y b n | a + n < b = f' x (a+x) y b n
-f' x a y b n | a + n > b = f' x a y (b+y) n
-f' _ _ _ _ _ = error "I wasn't there"
+-- https://en.wikipedia.org/wiki/Modular_multiplicative_inverse
+modInv :: Int -> Int -> Either String Int
+modInv a b =
+  case egcd a b of
+    (x, y)
+      | a * x + b * y == 1 -> Right x
+      | otherwise ->
+        Left $ "No modular inverse for " ++ show a ++ " and " ++ show b
 
-toAffineCoeffs (x,y,n) = (x*y, b)
-  where b = f x y n
-
-isGoodAt k (_,p,d) = 0 == (mod (k+d) p)
-
-findBestCoeffs xs = head $ sortBy (\(a,_) (b,_) -> compare b a) $ map toAffineCoeffs xs
-
-walkNs a b xs n = if all (isGoodAt k) xs then k else (walkNs a b xs $ n+1)
-  where k = a*n+b
-
-solve xs = walkNs a b xs 1
-  where (a, b) = findBestCoeffs xs
+-- https://en.wikipedia.org/wiki/Chinese_remainder_theorem
+chineseRemainder :: [Int] -> [Int] -> Either String Int
+chineseRemainder modulii residues =
+  zipWithM modInv crtModulii modulii >>=
+  (Right . (`mod` modPI) . sum . zipWith (*) crtModulii . zipWith (*) residues)
+  where
+    modPI = product modulii
+    crtModulii = (modPI `div`) <$> modulii

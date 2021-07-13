@@ -205,7 +205,14 @@ main = do
 - To represent a finite chained list of ints of constant size, we can use a fixed size array with each index pointing to its next value (see [day 23](src/day_23.py) ).
     - `cycle 1:0:2:[]` can be encoded: a[1] = 0, a[0] = 2, a[2] = 1 (this would make the chained list cyclic)
     - moving around a sublist is O(1), finding the next element of any int is O(1)
-- I should read and learn [this theorem][cr], it was apparently useful for day 13
+- See [day 13 (Haskell)](src/Day13.hs) and [day 13 (Python)](src/Day13PartTwo.py) for examples of use of:
+    - the [Chinese remainder Theorem][cr]
+    - the [extended Euclidean algorithm][egcd]
+    - [Bézout's identity][bi]
+    - [Fermat's little theorem][flt]
+    - the [modular multiplicative inverse][mmi]
+
+- _a<sup>n-1</sup> ≡ 1 [n]_ => _a*a<sup>n-2</sup> ≡ 1 [n]_ (easy modular inverse with Fermat's little theorem)
 
 - <https://fr.wikipedia.org/wiki/Congruence_lin%C3%A9aire>
 - <http://villemin.gerard.free.fr/ThNbDemo/ModCongr.htm>
@@ -213,6 +220,10 @@ main = do
 [bg]: https://en.wikipedia.org/wiki/Baby-step_giant-step
 [cr]: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
 [dl]: https://en.wikipedia.org/wiki/Discrete_logarithm
+[egcd]: https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+[mmi]: https://en.wikipedia.org/wiki/Modular_multiplicative_inverse
+[flt]: https://en.wikipedia.org/wiki/Fermat%27s_little_theorem
+[bi]: https://en.wikipedia.org/wiki/B%C3%A9zout%27s_identity
 
 ## References
 
