@@ -51,7 +51,10 @@ $ stack ghci src/DayXX.hs
 
 ## Learnings
 
-See also: <https://github.com/sroccaserra/advent-of-code-2019#what-i-learned>
+See also:
+- <https://github.com/sroccaserra/aoc2015#learnings>
+- <https://github.com/sroccaserra/aoc2018#learnings>
+- <https://github.com/sroccaserra/aoc2019#learnings>
 
 ### Smalltalk
 
