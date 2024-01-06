@@ -1,3 +1,9 @@
+Note: deprecated.
+
+See instead:
+
+- <https://github.com/sroccaserra/advent-of-code>
+
 # aoc2020
 
 Code for the advent of code 2020 event:
